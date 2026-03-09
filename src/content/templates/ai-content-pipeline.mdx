@@ -1,0 +1,53 @@
+---
+title: "AI 콘텐츠 생성 파이프라인"
+description: "Webhook으로 주제를 접수하면 OpenAI가 SNS, 블로그, 뉴스레터 3가지 버전으로 콘텐츠를 생성하여 Notion에 저장합니다"
+category: "marketing"
+useCase: "콘텐츠 생성"
+difficulty: "intermediate"
+pricing: "premium"
+price: 29000
+estimatedMinutes: 25
+credentials:
+  - "OpenAI API Key"
+  - "Notion API Key"
+  - "Slack OAuth"
+tags:
+  - "AI"
+  - "콘텐츠"
+  - "마케팅"
+  - "GPT"
+workflowJsonPath: "/workflows/ai-content-pipeline.json"
+nodeCount: 6
+publishedAt: 2026-03-09
+---
+
+## 이 워크플로우는
+
+Webhook으로 콘텐츠 주제를 접수하면 OpenAI GPT가 한 번에 3가지 버전의 콘텐츠를 생성합니다. SNS 캡션(200자), 블로그 본문(1000자), 뉴스레터(500자)로 자동 분리되어 Notion 데이터베이스에 저장되고, Slack으로 완료 알림이 전송됩니다.
+
+마케팅팀의 콘텐츠 생산성을 3배 이상 향상시킬 수 있습니다. 주제 하나로 멀티 채널 콘텐츠를 한 번에 생성하여, 각 채널에 맞는 콘텐츠를 별도로 작성하는 시간을 절약합니다.
+
+## 설정 가이드
+
+### Step 1: 크레덴셜 발급
+
+OpenAI API 키를 [OpenAI Platform](https://platform.openai.com)에서 발급받습니다. Notion에서 Internal Integration을 생성하고 API 키를 발급받은 후, 콘텐츠를 저장할 데이터베이스에 연결 권한을 부여합니다. Slack OAuth 앱을 설정합니다.
+
+### Step 2: n8n 설정
+
+다운로드한 JSON 파일을 n8n에서 Import합니다. Notion 데이터베이스에 "주제", "SNS 캡션", "블로그 본문", "뉴스레터", "생성일" 속성을 생성합니다. 각 노드에 크레덴셜을 연결하고, Notion 데이터베이스 ID와 Slack 채널 ID를 설정합니다.
+
+### Step 3: 테스트 및 활성화
+
+워크플로우를 활성화하면 Webhook URL이 생성됩니다. 다음과 같이 요청을 보내 테스트합니다.
+
+```json
+POST /webhook/content-pipeline
+{
+  "topic": "2026 마케팅 자동화 트렌드",
+  "tone": "전문적이면서 친근한",
+  "target": "마케팅 담당자"
+}
+```
+
+Notion에 3가지 버전 콘텐츠가 저장되고 Slack 알림이 수신되면 정상 동작입니다.

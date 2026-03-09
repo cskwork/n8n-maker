@@ -1,0 +1,268 @@
+{
+  "name": "[마케팅] 네이버 블로그 AI 자동 포스팅 - 평일 오전",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 10 * * 1-5"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger-node",
+      "name": "매일 블로그 포스팅",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "placeholder-spreadsheet-id",
+          "mode": "id",
+          "cachedResultName": "블로그 주제"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "id",
+          "cachedResultName": "Sheet1"
+        },
+        "options": {}
+      },
+      "id": "sheets-read-node",
+      "name": "주제 가져오기",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [450, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "placeholder-sheets-oauth2",
+          "name": "Google Sheets OAuth2 계정"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": ""
+          },
+          "conditions": [
+            {
+              "id": "1",
+              "leftValue": "={{ $json['발행여부'] }}",
+              "rightValue": "N",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-node",
+      "name": "미발행 주제?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "resource": "text",
+        "operation": "message",
+        "modelId": "gpt-4o-mini",
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "당신은 네이버 블로그 SEO 전문 작가입니다. 주어진 주제와 키워드로 SEO에 최적화된 네이버 블로그 글을 작성하세요.\n\n작성 규칙:\n1. 제목: 키워드를 포함한 매력적인 제목 (30자 내)\n2. 본문: 소제목 3-4개로 구조화, 각 소제목 아래 2-3문단\n3. 키워드를 자연스럽게 5-8회 반복\n4. 마무리에 CTA (댓글, 공유 유도) 포함\n5. 전체 분량: 1000-1500자\n\nJSON으로 응답: {\"title\": \"블로그 제목\", \"content\": \"HTML 형식 본문\"}"
+            },
+            {
+              "role": "user",
+              "content": "=주제: {{ $json['주제'] }}\n키워드: {{ $json['키워드'] }}"
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0.7
+        }
+      },
+      "id": "openai-node",
+      "name": "AI 글 생성",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.3,
+      "position": [850, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "placeholder-openai-api",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openapi.naver.com/blog/writePost.json",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.NAVER_BLOG_TOKEN }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ title: JSON.parse($json.message?.content || '{}').title || $json['주제'], contents: JSON.parse($json.message?.content || '{}').content || '' }) }}",
+        "options": {}
+      },
+      "id": "naver-blog-node",
+      "name": "네이버 블로그 포스팅",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1050, 300]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "placeholder-spreadsheet-id",
+          "mode": "id",
+          "cachedResultName": "블로그 주제"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "id",
+          "cachedResultName": "Sheet1"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "발행여부": "Y",
+            "발행일": "={{ $now.toFormat('yyyy-MM-dd') }}"
+          },
+          "matchingColumns": ["주제"],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "sheets-update-node",
+      "name": "발행 완료 표시",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [1250, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "placeholder-sheets-oauth2",
+          "name": "Google Sheets OAuth2 계정"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "매일 블로그 포스팅": {
+      "main": [
+        [
+          {
+            "node": "주제 가져오기",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "주제 가져오기": {
+      "main": [
+        [
+          {
+            "node": "미발행 주제?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "미발행 주제?": {
+      "main": [
+        [
+          {
+            "node": "AI 글 생성",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "AI 글 생성": {
+      "main": [
+        [
+          {
+            "node": "네이버 블로그 포스팅",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "네이버 블로그 포스팅": {
+      "main": [
+        [
+          {
+            "node": "발행 완료 표시",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "",
+    "timezone": "Asia/Seoul",
+    "saveExecutionProgress": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "executionTimeout": 3600
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2026-03-09T00:00:00.000Z",
+      "updatedAt": "2026-03-09T00:00:00.000Z",
+      "id": "marketing",
+      "name": "마케팅"
+    },
+    {
+      "createdAt": "2026-03-09T00:00:00.000Z",
+      "updatedAt": "2026-03-09T00:00:00.000Z",
+      "id": "korean-service",
+      "name": "한국서비스"
+    },
+    {
+      "createdAt": "2026-03-09T00:00:00.000Z",
+      "updatedAt": "2026-03-09T00:00:00.000Z",
+      "id": "ai-content",
+      "name": "AI 콘텐츠"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-03-09T00:00:00.000Z",
+  "versionId": "1"
+}

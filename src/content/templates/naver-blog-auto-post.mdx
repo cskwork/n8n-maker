@@ -1,0 +1,59 @@
+---
+title: "네이버 블로그 AI 자동 포스팅"
+description: "Google Sheets의 주제와 키워드로 OpenAI가 SEO 최적화된 블로그 글을 생성하고 네이버 블로그에 자동 포스팅합니다"
+category: "marketing"
+useCase: "콘텐츠 생성"
+difficulty: "advanced"
+pricing: "premium"
+price: 39000
+estimatedMinutes: 30
+credentials:
+  - "네이버 API Key"
+  - "OpenAI API Key"
+  - "Google Sheets OAuth"
+tags:
+  - "네이버"
+  - "블로그"
+  - "AI"
+  - "한국서비스"
+  - "콘텐츠"
+workflowJsonPath: "/workflows/naver-blog-auto-post.json"
+nodeCount: 6
+publishedAt: 2026-03-09
+---
+
+## 이 워크플로우는
+
+Google Sheets에서 주제와 키워드를 가져와 OpenAI GPT가 SEO에 최적화된 네이버 블로그 글을 자동 생성하고, 네이버 블로그 API로 자동 포스팅합니다. 발행된 주제는 시트에 자동으로 완료 표시됩니다.
+
+블로그 마케팅 담당자, 1인 사업자, 콘텐츠 크리에이터가 매일 양질의 블로그 글을 효율적으로 발행할 수 있습니다. 주제와 키워드만 입력하면 나머지는 AI가 처리합니다.
+
+## 설정 가이드
+
+### Step 1: 크레덴셜 발급
+
+**네이버 API 설정:**
+
+1. [네이버 개발자센터](https://developers.naver.com)에 로그인하고 애플리케이션을 등록합니다
+2. 사용 API에서 **"네이버 로그인"**과 **"블로그"** 권한을 선택합니다
+3. **Client ID**와 **Client Secret**을 확인합니다 (즉시 발급)
+4. 네이버 로그인 API를 통해 블로그 Write 권한이 포함된 **Access Token**을 발급받습니다
+
+**중요:** 네이버 블로그 API는 네이버 로그인(OAuth 2.0) 인증이 필요합니다. Access Token 발급 시 `blog` 스코프를 포함해야 합니다. 토큰 유효기간은 1시간이며, Refresh Token으로 갱신합니다.
+
+**OpenAI API 설정:**
+
+1. [OpenAI Platform](https://platform.openai.com)에서 API 키를 발급받습니다
+2. GPT-4o-mini 모델 사용 시 건당 약 50-100원 비용이 발생합니다
+
+**Google Sheets OAuth 설정:**
+
+1. n8n의 Credentials에서 Google Sheets OAuth2를 추가합니다
+
+### Step 2: n8n 설정
+
+다운로드한 JSON 파일을 n8n에서 Import합니다. n8n 환경변수에 `NAVER_BLOG_TOKEN`을 설정합니다. Google Sheets에 "주제", "키워드", "발행여부" 컬럼이 있는 시트를 준비합니다. 각 노드에 크레덴셜을 연결합니다.
+
+### Step 3: 테스트 및 활성화
+
+시트에 테스트 주제(발행여부: N)를 입력하고 수동 실행합니다. AI가 생성한 글이 네이버 블로그에 정상 발행되는지 확인합니다. 활성화하면 평일 오전 10시에 자동으로 미발행 주제를 포스팅합니다.
