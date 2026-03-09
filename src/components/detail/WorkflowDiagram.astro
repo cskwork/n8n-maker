@@ -1,0 +1,95 @@
+---
+/**
+ * WorkflowDiagram - n8n-demo CDN 임베딩 컨테이너
+ * 3단계 전환: 스켈레톤(기본) -> n8n-demo(로드 성공) -> 폴백(로드 실패)
+ * CDN에서 n8n-demo-component를 로드하여 인터랙티브 다이어그램 표시
+ */
+interface Props {
+  workflowJsonPath: string;
+  templateTitle: string;
+}
+
+const { workflowJsonPath, templateTitle } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const fullPath = base + workflowJsonPath;
+---
+
+<div
+  class="rounded-xl border border-surface-200 overflow-hidden bg-white shadow-sm"
+  style="touch-action: pan-x pan-y pinch-zoom;"
+>
+  {/* 스켈레톤 - 기본 표시 */}
+  <div
+    id="diagram-skeleton"
+    class="h-[300px] md:h-[450px] bg-surface-50 animate-pulse flex items-center justify-center"
+  >
+    <div class="text-center">
+      <svg class="w-8 h-8 text-surface-300 mx-auto mb-2 animate-spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-dasharray="32" stroke-dashoffset="8" />
+      </svg>
+      <p class="text-sm text-surface-400">워크플로우 다이어그램 로딩 중...</p>
+    </div>
+  </div>
+
+  {/* n8n-demo 라이브 영역 - 초기 hidden */}
+  <div id="diagram-live" class="h-[300px] md:h-[450px] hidden overflow-auto">
+    <n8n-demo
+      collapseformobile="false"
+      clicktointeract="false"
+      hidecanvaserrors="true"
+      tidyup="true"
+    ></n8n-demo>
+  </div>
+
+  {/* 폴백 영역 - 초기 hidden */}
+  <div id="diagram-fallback" class="hidden">
+    <slot name="fallback" />
+  </div>
+</div>
+
+{/* CDN 스크립트 로딩 - is:inline으로 Astro 번들링 방지 */}
+<script is:inline src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2.0.0/webcomponents-loader.js"></script>
+<script is:inline src="https://www.unpkg.com/lit@2.0.0-rc.2/polyfill-support.js"></script>
+<script is:inline src="https://cdn.jsdelivr.net/npm/@n8n_io/n8n-demo-component/n8n-demo.bundled.js"></script>
+
+<script define:vars={{ fullPath, templateTitle }}>
+  (function () {
+    const skeleton = document.getElementById('diagram-skeleton');
+    const live = document.getElementById('diagram-live');
+    const fallback = document.getElementById('diagram-fallback');
+    const demo = document.querySelector('n8n-demo');
+
+    if (!skeleton || !live || !fallback || !demo) return;
+
+    // 폴백 전환 함수
+    function showFallback() {
+      skeleton.classList.add('hidden');
+      live.classList.add('hidden');
+      fallback.classList.remove('hidden');
+    }
+
+    // 5초 타임아웃 — 로드 실패 시 폴백 전환
+    const timeout = setTimeout(function () {
+      if (live.classList.contains('hidden')) {
+        showFallback();
+      }
+    }, 5000);
+
+    // 워크플로우 JSON fetch 후 n8n-demo에 주입
+    fetch(fullPath)
+      .then(function (res) {
+        if (!res.ok) throw new Error('Fetch failed: ' + res.status);
+        return res.json();
+      })
+      .then(function (workflow) {
+        demo.setAttribute('workflow', JSON.stringify(workflow));
+        skeleton.classList.add('hidden');
+        live.classList.remove('hidden');
+        clearTimeout(timeout);
+      })
+      .catch(function () {
+        clearTimeout(timeout);
+        showFallback();
+      });
+  })();
+</script>

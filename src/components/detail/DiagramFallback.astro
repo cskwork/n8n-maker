@@ -1,0 +1,136 @@
+---
+/**
+ * DiagramFallback - 빌드 타임 정적 노드 플로우차트
+ * n8n-demo-component 로드 실패 시 표시되는 폴백 컴포넌트
+ * 빌드 타임에 워크플로우 JSON을 읽어 노드 목록을 정적 HTML로 생성
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface Props {
+  workflowJsonPath: string;
+}
+
+const { workflowJsonPath } = Astro.props;
+
+// 노드 타입 라벨 변환
+function formatNodeType(type: string): string {
+  if (type.startsWith('@n8n/n8n-nodes-langchain.')) {
+    return 'AI: ' + type.replace('@n8n/n8n-nodes-langchain.', '');
+  }
+  if (type.startsWith('n8n-nodes-base.')) {
+    return type.replace('n8n-nodes-base.', '');
+  }
+  return type;
+}
+
+// 노드 타입별 아이콘 색상
+function getNodeColor(type: string): string {
+  if (type.includes('langchain') || type.includes('openAi')) return 'border-l-purple-400';
+  if (type.includes('Trigger') || type.includes('trigger')) return 'border-l-green-400';
+  if (type.includes('slack') || type.includes('gmail') || type.includes('google')) return 'border-l-blue-400';
+  if (type.includes('code')) return 'border-l-amber-400';
+  if (type.includes('if') || type.includes('switch')) return 'border-l-orange-400';
+  return 'border-l-surface-300';
+}
+
+interface WorkflowNode {
+  name: string;
+  type: string;
+  position?: [number, number];
+}
+
+interface WorkflowConnection {
+  node: string;
+  type: string;
+  index: number;
+}
+
+let orderedNodes: WorkflowNode[] = [];
+
+try {
+  const filePath = path.join(process.cwd(), 'public', workflowJsonPath);
+  const raw = fs.readFileSync(filePath, 'utf-8');
+  const workflow = JSON.parse(raw);
+  const nodes: WorkflowNode[] = workflow.nodes || [];
+  const connections: Record<string, { main: WorkflowConnection[][] }> = workflow.connections || {};
+
+  // 연결 관계 기반 위상 정렬 (source -> target 순서)
+  const nodeMap = new Map<string, WorkflowNode>();
+  const inDegree = new Map<string, number>();
+  const adjacency = new Map<string, string[]>();
+
+  for (const node of nodes) {
+    nodeMap.set(node.name, node);
+    inDegree.set(node.name, 0);
+    adjacency.set(node.name, []);
+  }
+
+  for (const [source, conn] of Object.entries(connections)) {
+    if (conn.main) {
+      for (const outputs of conn.main) {
+        for (const target of outputs) {
+          adjacency.get(source)?.push(target.node);
+          inDegree.set(target.node, (inDegree.get(target.node) || 0) + 1);
+        }
+      }
+    }
+  }
+
+  // BFS 위상 정렬
+  const queue: string[] = [];
+  for (const [name, degree] of inDegree.entries()) {
+    if (degree === 0) queue.push(name);
+  }
+
+  const visited = new Set<string>();
+  while (queue.length > 0) {
+    const current = queue.shift()!;
+    if (visited.has(current)) continue;
+    visited.add(current);
+    const node = nodeMap.get(current);
+    if (node) orderedNodes.push(node);
+    for (const neighbor of adjacency.get(current) || []) {
+      inDegree.set(neighbor, (inDegree.get(neighbor) || 0) - 1);
+      if (inDegree.get(neighbor) === 0) {
+        queue.push(neighbor);
+      }
+    }
+  }
+
+  // 방문되지 않은 노드 추가 (고립 노드)
+  for (const node of nodes) {
+    if (!visited.has(node.name)) {
+      orderedNodes.push(node);
+    }
+  }
+} catch {
+  orderedNodes = [];
+}
+---
+
+<div class="p-4">
+  <p class="text-xs text-surface-400 mb-3">
+    워크플로우 미리보기 (간소화)
+  </p>
+
+  {orderedNodes.length > 0 ? (
+    <div class="flex flex-wrap items-center gap-2">
+      {orderedNodes.map((node, i) => (
+        <>
+          <div class={`px-3 py-2 bg-white border border-surface-200 rounded-lg shadow-sm border-l-4 ${getNodeColor(node.type)}`}>
+            <p class="text-sm font-medium text-surface-800 whitespace-nowrap">{node.name}</p>
+            <p class="text-xs text-surface-400 mt-0.5">{formatNodeType(node.type)}</p>
+          </div>
+          {i < orderedNodes.length - 1 && (
+            <svg class="w-4 h-4 text-surface-300 shrink-0" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          )}
+        </>
+      ))}
+    </div>
+  ) : (
+    <p class="text-sm text-surface-400">워크플로우 정보를 불러올 수 없습니다.</p>
+  )}
+</div>

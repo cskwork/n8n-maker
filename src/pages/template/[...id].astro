@@ -9,6 +9,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import CtaSection from '../../components/detail/CtaSection.astro';
 import CredentialBadges from '../../components/detail/CredentialBadges.astro';
 import RelatedTemplates from '../../components/detail/RelatedTemplates.astro';
+import WorkflowDiagram from '../../components/detail/WorkflowDiagram.astro';
+import DiagramFallback from '../../components/detail/DiagramFallback.astro';
 
 // 한글 매핑 (TemplateCard와 동일 — Astro 컴포넌트 export 제약으로 별도 정의)
 const categoryLabel: Record<string, string> = {
@@ -84,14 +86,11 @@ const pricingText = pricing === 'free' ? '무료' : '프리미엄';
       <CtaSection pricing={pricing} workflowJsonPath={workflowJsonPath} title={title} price={price} />
     </section>
 
-    {/* 3. 다이어그램 영역 (플레이스홀더 — Plan 03에서 구현) */}
+    {/* 3. 워크플로우 다이어그램 (n8n-demo + 폴백) */}
     <section class="mb-8">
-      <div
-        id="workflow-diagram"
-        class="rounded-xl border border-surface-200 bg-surface-50 h-[300px] md:h-[450px] flex items-center justify-center"
-      >
-        <p class="text-surface-400">워크플로우 다이어그램 (Plan 03에서 구현)</p>
-      </div>
+      <WorkflowDiagram workflowJsonPath={workflowJsonPath} templateTitle={title}>
+        <DiagramFallback slot="fallback" workflowJsonPath={workflowJsonPath} />
+      </WorkflowDiagram>
     </section>
 
     {/* 4. 설명 (MDX body) */}
