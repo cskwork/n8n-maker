@@ -43,12 +43,11 @@ Plans:
   2. 각 카테고리를 클릭하면 해당 카테고리의 템플릿 목록이 카드형 레이아웃으로 나타난다
   3. 템플릿 카드에 이름, 카테고리, 난이도, 무료/프리미엄 배지가 한눈에 보인다
   4. 카드를 클릭하면 해당 템플릿 상세 페이지로 이동한다
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 02-01: TBD
-- [ ] 02-02: TBD
-- [ ] 02-03: TBD
+- [ ] 02-01-PLAN.md — 카탈로그 컴포넌트(TemplateCard/SortDropdown/EmptyCategory) + 카테고리 동적 라우트 페이지
+- [ ] 02-02-PLAN.md — 랜딩 페이지 개선 (히어로 통계, TemplateCard 전환, 모바일 2x2) + UI 시각 검증
 
 ### Phase 3: 상세 페이지 & 비즈니스 모델
 **Goal**: 사용자가 각 템플릿의 상세 정보를 인터랙티브 다이어그램과 함께 확인하고, 무료 템플릿은 즉시 다운로드, 프리미엄 템플릿은 문의를 통해 구매할 수 있다
@@ -105,12 +104,12 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. 프로젝트 기반 구축 | 2/2 | Complete | 2026-03-09 |
-| 2. 카탈로그 & 랜딩 UI | 0/3 | Not started | - |
+| 2. 카탈로그 & 랜딩 UI | 0/2 | Not started | - |
 | 3. 상세 페이지 & 비즈니스 모델 | 0/4 | Not started | - |
 | 4. 콘텐츠 제작 | 0/4 | Not started | - |
 | 5. SEO & 런칭 | 0/3 | Not started | - |
