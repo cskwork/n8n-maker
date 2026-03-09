@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: 프로젝트 기반 구축** - Astro 5 + Tailwind CSS 4 프로젝트 셋업, Content Collections 스키마, 반응형 레이아웃
 - [x] **Phase 2: 카탈로그 & 랜딩 UI** - 업종별 카테고리 브라우징, 카드 레이아웃, 랜딩 페이지 (completed 2026-03-09)
 - [x] **Phase 3: 상세 페이지 & 비즈니스 모델** - 템플릿 상세 페이지, 인터랙티브 다이어그램, 무료/프리미엄 구분, 다운로드/문의 흐름 (completed 2026-03-09)
-- [ ] **Phase 4: 콘텐츠 제작** - 업종별 워크플로우 템플릿 15-20개, 한국 서비스 API 설정 가이드
+- [x] **Phase 4: 콘텐츠 제작** - 업종별 워크플로우 템플릿 15-20개, 한국 서비스 API 설정 가이드 (completed 2026-03-09)
 - [ ] **Phase 5: SEO & 런칭** - 메타 태그, sitemap, 키워드 랜딩 페이지, GitHub Pages 배포
 
 ## Phase Details
@@ -79,10 +79,10 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — 금융(finance) 카테고리 4개 신규 템플릿 (주가 모니터링, 금융 뉴스 AI 요약, AI 인보이스, 경비 보고서)
-- [ ] 04-02-PLAN.md — 마케팅(marketing) 카테고리 5개 신규 템플릿 (카카오톡 알림, SNS 크로스 포스팅, 경쟁사 모니터링, 네이버 블로그, AI 콘텐츠)
+- [x] 04-01-PLAN.md — 금융(finance) 카테고리 4개 신규 템플릿 (주가 모니터링, 금융 뉴스 AI 요약, AI 인보이스, 경비 보고서)
+- [x] 04-02-PLAN.md — 마케팅(marketing) 카테고리 5개 신규 템플릿 (카카오톡 알림, SNS 크로스 포스팅, 경쟁사 모니터링, 네이버 블로그, AI 콘텐츠)
 - [x] 04-03-PLAN.md — HR/IT 카테고리 6개 신규 템플릿 (업무 보고, 온보딩, 사람인 자소서, 네이버 뉴스, 서버 모니터링, Slack-Notion 동기화)
-- [ ] 04-04-PLAN.md — 전체 빌드 검증 + 콘텐츠 감사 + 시각 검증
+- [x] 04-04-PLAN.md — 전체 빌드 검증 + 콘텐츠 감사 + 시각 검증
 
 ### Phase 5: SEO & 런칭
 **Goal**: 검색 엔진(구글 + 네이버)에서 업종별 키워드로 유입되고, GitHub Pages에 프로덕션 배포가 완료된다
@@ -110,5 +110,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 1. 프로젝트 기반 구축 | 2/2 | Complete | 2026-03-09 |
 | 2. 카탈로그 & 랜딩 UI | 2/2 | Complete   | 2026-03-09 |
 | 3. 상세 페이지 & 비즈니스 모델 | 3/3 | Complete   | 2026-03-09 |
-| 4. 콘텐츠 제작 | 3/4 | In Progress|  |
+| 4. 콘텐츠 제작 | 4/4 | Complete | 2026-03-09 |
 | 5. SEO & 런칭 | 0/3 | Not started | - |
