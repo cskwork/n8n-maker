@@ -1,9 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import TemplateCard from '../components/catalog/TemplateCard.astro';
 import { getCollection } from 'astro:content';
 
 const allTemplates = await getCollection('templates');
-const sampleTemplates = allTemplates.slice(0, 3);
+
+// 카테고리별 균형 선택: 각 카테고리에서 첫 번째 템플릿
+const categoryOrder = ['finance', 'marketing', 'hr', 'it'];
+const featuredTemplates = categoryOrder
+  .map((cat) => allTemplates.find((t) => t.data.category === cat))
+  .filter(Boolean);
 
 // 카테고리 정보
 const categories = [
@@ -28,21 +34,6 @@ const categories = [
     description: '서버 모니터링, 배포 자동화, 알림 통합',
   },
 ];
-
-// 카테고리 한글 매핑
-const categoryLabel: Record<string, string> = {
-  finance: '금융',
-  marketing: '마케팅',
-  hr: 'HR',
-  it: 'IT/DevOps',
-};
-
-// 난이도 한글 매핑
-const difficultyLabel: Record<string, string> = {
-  beginner: '초급',
-  intermediate: '중급',
-  advanced: '고급',
-};
 ---
 
 <BaseLayout title="홈">
@@ -61,6 +52,9 @@ const difficultyLabel: Record<string, string> = {
       >
         템플릿 둘러보기
       </a>
+      <p class="mt-4 text-sm text-surface-400">
+        {allTemplates.length}+ 템플릿 &middot; 4개 업종 &middot; 즉시 다운로드
+      </p>
     </div>
   </section>
 
@@ -70,7 +64,7 @@ const difficultyLabel: Record<string, string> = {
       <h2 class="text-2xl md:text-3xl font-bold text-surface-900 mb-8 text-center">
         카테고리별 템플릿
       </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {categories.map((cat) => (
           <a
             href={`/n8n-marketplace/category/${cat.slug}`}
@@ -131,29 +125,24 @@ const difficultyLabel: Record<string, string> = {
     </div>
   </section>
 
-  <!-- 샘플 템플릿 섹션 -->
+  <!-- 인기 템플릿 섹션 -->
   <section class="py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="text-2xl md:text-3xl font-bold text-surface-900 mb-8 text-center">
         인기 템플릿
       </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {sampleTemplates.map((template) => (
-          <div class="p-6 bg-white rounded-xl border border-surface-200 hover:shadow-md transition-shadow">
-            <h3 class="font-bold text-surface-900 mb-2">{template.data.title}</h3>
-            <p class="text-sm text-surface-500 mb-4 line-clamp-2">{template.data.description}</p>
-            <div class="flex flex-wrap gap-2">
-              <span class="text-xs bg-primary-50 text-primary-700 px-2 py-1 rounded-full font-medium">
-                {categoryLabel[template.data.category] || template.data.category}
-              </span>
-              <span class="text-xs bg-surface-100 text-surface-600 px-2 py-1 rounded-full">
-                {difficultyLabel[template.data.difficulty] || template.data.difficulty}
-              </span>
-              <span class={`text-xs px-2 py-1 rounded-full ${template.data.pricing === 'free' ? 'bg-green-50 text-green-700' : 'bg-amber-50 text-amber-700'}`}>
-                {template.data.pricing === 'free' ? '무료' : '프리미엄'}
-              </span>
-            </div>
-          </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {featuredTemplates.map((template) => (
+          <TemplateCard
+            title={template!.data.title}
+            description={template!.data.description}
+            category={template!.data.category}
+            difficulty={template!.data.difficulty}
+            pricing={template!.data.pricing}
+            nodeCount={template!.data.nodeCount}
+            estimatedMinutes={template!.data.estimatedMinutes}
+            slug={template!.id}
+          />
         ))}
       </div>
     </div>
