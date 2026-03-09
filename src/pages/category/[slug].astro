@@ -1,0 +1,78 @@
+---
+/**
+ * 카테고리 동적 라우트 페이지
+ * - getStaticPaths로 4개 카테고리 정적 페이지 생성
+ * - 템플릿 있으면 카드 그리드 + 정렬, 없으면 빈 카테고리 안내
+ */
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TemplateCard from '../../components/catalog/TemplateCard.astro';
+import SortDropdown from '../../components/catalog/SortDropdown.astro';
+import EmptyCategory from '../../components/catalog/EmptyCategory.astro';
+
+export async function getStaticPaths() {
+  const categoryMeta: Record<string, { name: string; description: string }> = {
+    finance: { name: '금융', description: 'DART 공시, 주가 알림, 재무 보고서 자동화' },
+    marketing: { name: '마케팅', description: 'SNS 자동 포스팅, 리드 수집, 캠페인 관리' },
+    hr: { name: 'HR', description: '채용공고 수집, 지원자 관리, 온보딩 자동화' },
+    it: { name: 'IT/DevOps', description: '서버 모니터링, 배포 자동화, 알림 통합' },
+  };
+
+  const allTemplates = await getCollection('templates');
+
+  return Object.entries(categoryMeta).map(([slug, meta]) => ({
+    params: { slug },
+    props: {
+      category: { slug, ...meta },
+      templates: allTemplates.filter((t) => t.data.category === slug),
+    },
+  }));
+}
+
+const { category, templates } = Astro.props;
+---
+
+<BaseLayout
+  title={category.name}
+  breadcrumbs={[{ label: category.name, href: `/n8n-marketplace/category/${category.slug}` }]}
+>
+  <!-- 카테고리 헤더 -->
+  <section class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-2xl md:text-3xl font-bold text-surface-900 mb-2">{category.name}</h1>
+      <p class="text-surface-500 mb-1">{category.description}</p>
+      <p class="text-sm text-surface-400">템플릿 {templates.length}개</p>
+    </div>
+  </section>
+
+  <!-- 정렬 + 그리드 또는 빈 카테고리 안내 -->
+  {templates.length > 0 ? (
+    <section class="pb-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <SortDropdown />
+        <div id="template-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+          {templates.map((t) => (
+            <div
+              data-difficulty={t.data.difficulty === 'beginner' ? 1 : t.data.difficulty === 'intermediate' ? 2 : 3}
+              data-date={t.data.publishedAt.toISOString()}
+              data-pricing={t.data.pricing === 'free' ? 0 : 1}
+            >
+              <TemplateCard
+                title={t.data.title}
+                description={t.data.description}
+                category={t.data.category}
+                difficulty={t.data.difficulty}
+                pricing={t.data.pricing}
+                nodeCount={t.data.nodeCount}
+                estimatedMinutes={t.data.estimatedMinutes}
+                slug={t.id}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  ) : (
+    <EmptyCategory currentSlug={category.slug} />
+  )}
+</BaseLayout>
