@@ -63,7 +63,7 @@ Plans:
 
 Plans:
 - [ ] 03-01-PLAN.md — 템플릿 상세 페이지 핵심 구조 (동적 라우트 + 메타 배지 + CTA + 크레덴셜 + 관련 템플릿)
-- [ ] 03-02-PLAN.md — /pricing 프리미엄 안내 페이지
+- [x] 03-02-PLAN.md — /pricing 프리미엄 안내 페이지
 - [ ] 03-03-PLAN.md — 워크플로우 다이어그램 시각화 (n8n-demo CDN + 폴백) + Phase 3 시각 검증
 
 ### Phase 4: 콘텐츠 제작
@@ -109,6 +109,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 |-------|----------------|--------|-----------|
 | 1. 프로젝트 기반 구축 | 2/2 | Complete | 2026-03-09 |
 | 2. 카탈로그 & 랜딩 UI | 2/2 | Complete   | 2026-03-09 |
-| 3. 상세 페이지 & 비즈니스 모델 | 0/3 | Not started | - |
+| 3. 상세 페이지 & 비즈니스 모델 | 1/3 | In Progress | - |
 | 4. 콘텐츠 제작 | 0/4 | Not started | - |
 | 5. SEO & 런칭 | 0/3 | Not started | - |

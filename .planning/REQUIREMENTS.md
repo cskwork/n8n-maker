@@ -52,7 +52,7 @@
 
 - [ ] **BIZ-01**: 카테고리당 2-3개 무료 템플릿이 즉시 다운로드 가능하다
 - [ ] **BIZ-02**: 프리미엄 템플릿은 Google Form 문의 연결로 구매 요청할 수 있다
-- [ ] **BIZ-03**: 가격 정보 또는 프리미엄 안내 페이지가 존재한다
+- [x] **BIZ-03**: 가격 정보 또는 프리미엄 안내 페이지가 존재한다
 
 ## v2 Requirements
 
@@ -119,7 +119,7 @@
 | VISUAL-03 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
 | BIZ-01 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
 | BIZ-02 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
-| BIZ-03 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
+| BIZ-03 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |
 | CONT-01 | Phase 4: 콘텐츠 제작 | Pending |
 | CONT-02 | Phase 4: 콘텐츠 제작 | Pending |
 | CONT-03 | Phase 4: 콘텐츠 제작 | Pending |
