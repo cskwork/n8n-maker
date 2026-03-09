@@ -1,0 +1,66 @@
+---
+/**
+ * TemplateCard 컴포넌트
+ * - 재사용 가능한 템플릿 카드 UI
+ * - 카드 전체가 상세 페이지 링크
+ * - 배지: 카테고리(primary), 난이도(surface), 가격(green/amber)
+ * - 보조 정보: 노드 수 + 예상 설정 시간
+ */
+
+interface Props {
+  title: string;
+  description: string;
+  category: string;
+  difficulty: string;
+  pricing: string;
+  nodeCount?: number;
+  estimatedMinutes: number;
+  slug: string;
+}
+
+const { title, description, category, difficulty, pricing, nodeCount, estimatedMinutes, slug } = Astro.props;
+
+// 카테고리/난이도 한글 매핑 (단일 소스)
+const categoryLabel: Record<string, string> = {
+  finance: '금융',
+  marketing: '마케팅',
+  hr: 'HR',
+  it: 'IT/DevOps',
+};
+
+const difficultyLabel: Record<string, string> = {
+  beginner: '초급',
+  intermediate: '중급',
+  advanced: '고급',
+};
+
+const pricingClass = pricing === 'free'
+  ? 'bg-green-50 text-green-700'
+  : 'bg-amber-50 text-amber-700';
+
+const pricingText = pricing === 'free' ? '무료' : '프리미엄';
+---
+
+<a
+  href={`/n8n-marketplace/template/${slug}`}
+  class="block p-6 bg-white rounded-xl border border-surface-200
+         hover:shadow-lg hover:border-primary-300 transition-all
+         active:scale-[0.98] active:transition-transform"
+>
+  <h3 class="font-bold text-surface-900 mb-2">{title}</h3>
+  <p class="text-sm text-surface-500 mb-4 line-clamp-2">{description}</p>
+  <div class="flex flex-wrap gap-2 mb-3">
+    <span class="text-xs bg-primary-50 text-primary-700 px-2 py-1 rounded-full font-medium">
+      {categoryLabel[category] || category}
+    </span>
+    <span class="text-xs bg-surface-100 text-surface-600 px-2 py-1 rounded-full">
+      {difficultyLabel[difficulty] || difficulty}
+    </span>
+    <span class={`text-xs px-2 py-1 rounded-full ${pricingClass}`}>
+      {pricingText}
+    </span>
+  </div>
+  <p class="text-xs text-surface-400">
+    {nodeCount ? `${nodeCount}개 노드 · ` : ''}{estimatedMinutes}분
+  </p>
+</a>

@@ -1,0 +1,48 @@
+---
+/**
+ * SortDropdown 컴포넌트
+ * - 카테고리 페이지에서 템플릿 카드 정렬
+ * - 옵션: 난이도순(기본), 최신순, 가격순
+ * - 클라이언트 JS로 DOM 재정렬
+ */
+---
+
+<div class="flex items-center gap-2">
+  <label for="sort-select" class="text-sm text-surface-500">정렬:</label>
+  <select
+    id="sort-select"
+    class="border border-surface-200 rounded-lg px-3 py-2 text-sm text-surface-700 bg-white
+           focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+  >
+    <option value="difficulty">난이도순</option>
+    <option value="date">최신순</option>
+    <option value="pricing">가격순</option>
+  </select>
+</div>
+
+<script>
+  const select = document.getElementById('sort-select') as HTMLSelectElement | null;
+  const grid = document.getElementById('template-grid');
+
+  if (select && grid) {
+    select.addEventListener('change', () => {
+      const sortBy = select.value;
+      const cards = [...grid.children] as HTMLElement[];
+
+      cards.sort((a, b) => {
+        if (sortBy === 'difficulty') {
+          return Number(a.dataset.difficulty) - Number(b.dataset.difficulty);
+        }
+        if (sortBy === 'date') {
+          return new Date(b.dataset.date!).getTime() - new Date(a.dataset.date!).getTime();
+        }
+        if (sortBy === 'pricing') {
+          return Number(a.dataset.pricing) - Number(b.dataset.pricing);
+        }
+        return 0;
+      });
+
+      cards.forEach((card) => grid.appendChild(card));
+    });
+  }
+</script>
