@@ -16,6 +16,7 @@ const templates = defineCollection({
     tags: z.array(z.string()).default([]),
     workflowJsonPath: z.string(),
     nodeCount: z.number().optional(),
+    price: z.number().optional(),
     publishedAt: z.coerce.date(),
     updatedAt: z.coerce.date().optional(),
   }),

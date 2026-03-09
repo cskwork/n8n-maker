@@ -1,0 +1,59 @@
+---
+/**
+ * CtaSection 컴포넌트
+ * - 무료 템플릿: JSON 다운로드 버튼 (download 속성)
+ * - 프리미엄 템플릿: Google Form 구매 문의 버튼
+ * - 가격 표시 (price prop이 있는 경우)
+ */
+
+interface Props {
+  pricing: string;
+  workflowJsonPath: string;
+  title: string;
+  price?: number;
+}
+
+const { pricing, workflowJsonPath, title, price } = Astro.props;
+
+const base = import.meta.env.BASE_URL;
+
+// TODO: 실제 Google Form ID로 교체 필요
+const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/PLACEHOLDER_FORM_ID/viewform';
+// TODO: 실제 Form entry ID로 교체 필요
+const TEMPLATE_NAME_ENTRY = 'entry.123456789';
+
+const googleFormPrefillUrl = `${GOOGLE_FORM_URL}?usp=pp_url&${TEMPLATE_NAME_ENTRY}=${encodeURIComponent(title)}`;
+
+const isFree = pricing === 'free';
+---
+
+{isFree ? (
+  <div class="flex justify-center">
+    <a
+      href={`${base}${workflowJsonPath}`}
+      download={`${title}.json`}
+      class="inline-flex items-center gap-2 px-6 py-3 bg-primary-500 text-white font-semibold rounded-lg
+             hover:bg-primary-600 transition-colors shadow-sm"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+      </svg>
+      무료 다운로드
+    </a>
+  </div>
+) : (
+  <div class="flex justify-center">
+    <a
+      href={googleFormPrefillUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center gap-2 px-6 py-3 bg-amber-500 text-white font-semibold rounded-lg
+             hover:bg-amber-600 transition-colors shadow-sm"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      </svg>
+      {price ? `\u20A9${price.toLocaleString()} \u00B7 \uAD6C\uB9E4 \uBB38\uC758\uD558\uAE30` : '\uD504\uB9AC\uBBF8\uC5C4 \u00B7 \uAD6C\uB9E4 \uBB38\uC758\uD558\uAE30'}
+    </a>
+  </div>
+)}

@@ -1,0 +1,45 @@
+---
+/**
+ * RelatedTemplates 컴포넌트
+ * - 같은 카테고리의 다른 템플릿 최대 3개를 TemplateCard로 표시
+ * - templates 배열이 비어있으면 섹션 자체를 렌더링하지 않음
+ */
+import TemplateCard from '../catalog/TemplateCard.astro';
+
+interface Props {
+  templates: Array<{
+    id: string;
+    data: {
+      title: string;
+      description: string;
+      category: string;
+      difficulty: string;
+      pricing: string;
+      nodeCount?: number;
+      estimatedMinutes: number;
+    };
+  }>;
+}
+
+const { templates } = Astro.props;
+---
+
+{templates.length > 0 && (
+  <section>
+    <h2 class="text-xl font-bold text-surface-900 mb-6">관련 템플릿</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {templates.map((template) => (
+        <TemplateCard
+          title={template.data.title}
+          description={template.data.description}
+          category={template.data.category}
+          difficulty={template.data.difficulty}
+          pricing={template.data.pricing}
+          nodeCount={template.data.nodeCount}
+          estimatedMinutes={template.data.estimatedMinutes}
+          slug={template.id}
+        />
+      ))}
+    </div>
+  </section>
+)}

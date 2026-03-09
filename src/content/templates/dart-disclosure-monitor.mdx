@@ -5,6 +5,7 @@ category: "finance"
 useCase: "모니터링"
 difficulty: "intermediate"
 pricing: "premium"
+price: 29000
 estimatedMinutes: 25
 credentials:
   - "DART API Key"
@@ -25,3 +26,17 @@ publishedAt: 2026-03-09
 새로운 공시가 등록되면 Slack 채널로 즉시 알림을 보내 투자 판단에 필요한 정보를 빠르게 파악할 수 있습니다.
 
 증권사 리포트보다 빠르게 원본 공시 정보를 확인할 수 있어, 투자자와 금융 업무 담당자에게 유용합니다.
+
+## 설정 가이드
+
+### Step 1: 크레덴셜 발급
+
+DART Open API(https://opendart.fss.or.kr)에서 API 키를 발급받습니다. 회원가입 후 인증키 신청 메뉴에서 발급할 수 있으며, 발급까지 약 1~2일 소요됩니다. Slack 워크스페이스에서 OAuth 앱을 생성하고 Bot Token을 발급받습니다.
+
+### Step 2: n8n 설정
+
+다운로드한 JSON 파일을 n8n의 Workflows 메뉴에서 Import합니다. 가져온 워크플로우에서 DART API Key와 Slack OAuth 크레덴셜을 설정합니다. 모니터링할 기업의 고유번호(corp_code)를 Schedule Trigger 노드에서 설정합니다.
+
+### Step 3: 활성화
+
+워크플로우를 활성화하면 설정된 스케줄에 따라 자동으로 공시를 모니터링합니다. 새로운 공시가 감지되면 지정한 Slack 채널로 즉시 알림이 전송됩니다.
