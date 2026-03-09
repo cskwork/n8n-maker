@@ -1,0 +1,58 @@
+---
+/**
+ * MobileMenu 컴포넌트
+ * - md 미만에서만 표시 (md:hidden)
+ * - 카테고리 4개 링크 + CTA 버튼 (세로 배치)
+ * - #menu-toggle 클릭 시 hidden 토글
+ */
+---
+
+<div id="mobile-menu" class="hidden md:hidden bg-white border-b border-surface-200">
+  <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col gap-2">
+    <a
+      href="/n8n-marketplace/category/finance"
+      class="px-4 py-3 text-surface-700 hover:bg-surface-50 hover:text-primary-600 font-medium rounded-lg transition-colors"
+    >
+      금융
+    </a>
+    <a
+      href="/n8n-marketplace/category/marketing"
+      class="px-4 py-3 text-surface-700 hover:bg-surface-50 hover:text-primary-600 font-medium rounded-lg transition-colors"
+    >
+      마케팅
+    </a>
+    <a
+      href="/n8n-marketplace/category/hr"
+      class="px-4 py-3 text-surface-700 hover:bg-surface-50 hover:text-primary-600 font-medium rounded-lg transition-colors"
+    >
+      HR
+    </a>
+    <a
+      href="/n8n-marketplace/category/it"
+      class="px-4 py-3 text-surface-700 hover:bg-surface-50 hover:text-primary-600 font-medium rounded-lg transition-colors"
+    >
+      IT/DevOps
+    </a>
+    <div class="mt-2 pt-2 border-t border-surface-200">
+      <a
+        href="/n8n-marketplace/#get-started"
+        class="block text-center px-4 py-3 bg-primary-500 text-white font-medium rounded-lg hover:bg-primary-600 transition-colors"
+      >
+        시작하기
+      </a>
+    </div>
+  </nav>
+</div>
+
+<script>
+  // 햄버거 메뉴 토글
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  if (menuToggle && mobileMenu) {
+    menuToggle.addEventListener('click', () => {
+      const isHidden = mobileMenu.classList.toggle('hidden');
+      menuToggle.setAttribute('aria-expanded', String(!isHidden));
+    });
+  }
+</script>
