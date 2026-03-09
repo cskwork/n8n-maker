@@ -16,7 +16,7 @@
 - [x] **CATA-01**: 사용자가 4개 업종 카테고리(금융, 마케팅, HR, IT/DevOps)로 템플릿을 브라우징할 수 있다
 - [x] **CATA-02**: 각 카테고리 페이지에서 템플릿 목록을 카드형 레이아웃으로 볼 수 있다
 - [x] **CATA-03**: 템플릿 카드에 이름, 카테고리, 난이도, 무료/프리미엄 배지가 표시된다
-- [ ] **CATA-04**: 랜딩 페이지에서 주요 템플릿과 카테고리를 한눈에 볼 수 있다
+- [x] **CATA-04**: 랜딩 페이지에서 주요 템플릿과 카테고리를 한눈에 볼 수 있다
 
 ### 템플릿 상세 (DETAIL)
 
@@ -107,7 +107,7 @@
 | CATA-01 | Phase 2: 카탈로그 & 랜딩 UI | Complete |
 | CATA-02 | Phase 2: 카탈로그 & 랜딩 UI | Complete |
 | CATA-03 | Phase 2: 카탈로그 & 랜딩 UI | Complete |
-| CATA-04 | Phase 2: 카탈로그 & 랜딩 UI | Pending |
+| CATA-04 | Phase 2: 카탈로그 & 랜딩 UI | Complete |
 | DETAIL-01 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
 | DETAIL-02 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
 | DETAIL-03 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |

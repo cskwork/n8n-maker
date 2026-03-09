@@ -13,7 +13,7 @@
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: 프로젝트 기반 구축** - Astro 5 + Tailwind CSS 4 프로젝트 셋업, Content Collections 스키마, 반응형 레이아웃
-- [ ] **Phase 2: 카탈로그 & 랜딩 UI** - 업종별 카테고리 브라우징, 카드 레이아웃, 랜딩 페이지
+- [x] **Phase 2: 카탈로그 & 랜딩 UI** - 업종별 카테고리 브라우징, 카드 레이아웃, 랜딩 페이지 (completed 2026-03-09)
 - [ ] **Phase 3: 상세 페이지 & 비즈니스 모델** - 템플릿 상세 페이지, 인터랙티브 다이어그램, 무료/프리미엄 구분, 다운로드/문의 흐름
 - [ ] **Phase 4: 콘텐츠 제작** - 업종별 워크플로우 템플릿 15-20개, 한국 서비스 API 설정 가이드
 - [ ] **Phase 5: SEO & 런칭** - 메타 태그, sitemap, 키워드 랜딩 페이지, GitHub Pages 배포
@@ -109,7 +109,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. 프로젝트 기반 구축 | 2/2 | Complete | 2026-03-09 |
-| 2. 카탈로그 & 랜딩 UI | 1/2 | In progress | - |
+| 2. 카탈로그 & 랜딩 UI | 2/2 | Complete   | 2026-03-09 |
 | 3. 상세 페이지 & 비즈니스 모델 | 0/4 | Not started | - |
 | 4. 콘텐츠 제작 | 0/4 | Not started | - |
 | 5. SEO & 런칭 | 0/3 | Not started | - |

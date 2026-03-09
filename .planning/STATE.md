@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: in-progress
-stopped_at: "02-01 카탈로그 컴포넌트 + 카테고리 라우트 완료"
-last_updated: "2026-03-09T11:16:03Z"
-last_activity: 2026-03-09 — Plan 02-01 실행 완료 (카탈로그 컴포넌트 3종 + 카테고리 라우트 4개)
+status: completed
+stopped_at: Completed 02-02-PLAN.md (Phase 2 완료)
+last_updated: "2026-03-09T11:25:35.997Z"
+last_activity: 2026-03-09 — Plan 02-02 실행 완료 (랜딩 페이지 히어로 통계 + TemplateCard 전환 + 모바일 2x2 + UI 시각 검증)
 progress:
   total_phases: 5
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 4
-  completed_plans: 3
-  percent: 75
+  completed_plans: 4
+  percent: 100
 ---
 
 # Project State
@@ -21,33 +21,33 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-09)
 
 **Core value:** 비개발자가 복잡한 업무 자동화를 n8n 워크플로우 템플릿 하나로 즉시 실행할 수 있게 하는 것
-**Current focus:** Phase 2 진행 중 - 카탈로그 & 랜딩 UI
+**Current focus:** Phase 2 완료 - Phase 3 대기
 
 ## Current Position
 
-Phase: 2 of 5 (카탈로그 & 랜딩 UI) - IN PROGRESS
-Plan: 1 of 2 in current phase (완료)
-Status: Plan 02-01 Complete, 02-02 대기
-Last activity: 2026-03-09 — Plan 02-01 실행 완료 (카탈로그 컴포넌트 3종 + 카테고리 라우트 4개)
+Phase: 2 of 5 (카탈로그 & 랜딩 UI) - COMPLETE
+Plan: 2 of 2 in current phase (완료)
+Status: Phase 2 Complete, Phase 3 대기
+Last activity: 2026-03-09 — Plan 02-02 실행 완료 (랜딩 페이지 히어로 통계 + TemplateCard 전환 + 모바일 2x2 + UI 시각 검증)
 
-Progress: [████████░░] 75%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
+- Total plans completed: 4
 - Average duration: 5 min
-- Total execution time: 0.25 hours
+- Total execution time: 0.3 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1. 프로젝트 기반 구축 | 2/2 | 12 min | 6 min |
-| 2. 카탈로그 & 랜딩 UI | 1/2 | 3 min | 3 min |
+| 2. 카탈로그 & 랜딩 UI | 2/2 | 6 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (4 min), 01-02 (8 min), 02-01 (3 min)
+- Last 5 plans: 01-01 (4 min), 01-02 (8 min), 02-01 (3 min), 02-02 (3 min)
 - Trend: improving
 
 *Updated after each plan completion*
@@ -71,6 +71,9 @@ Recent decisions affecting current work:
 - (02-01) categoryMeta를 getStaticPaths 내부에 정의 (Astro 스코프 제약으로 외부 const 참조 불가)
 - (02-01) categoryLabel/difficultyLabel 매핑을 TemplateCard 내부 단일 소스로 관리
 - (02-01) EmptyCategory에 SVG 문서 아이콘 + 안내 문구 + 다른 카테고리 링크 제공
+- (02-02) 인기 템플릿을 categoryOrder 배열 기반 균형 선택으로 변경 (slice(0,3) 대체)
+- (02-02) TemplateCard 컴포넌트 재사용으로 인라인 카드 마크업 제거
+- (02-02) 히어로 CTA 아래 가로 인라인 통계 배치
 
 ### Pending Todos
 
@@ -83,6 +86,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-09T11:16:03Z
-Stopped at: Completed 02-01-PLAN.md
-Resume file: .planning/phases/02-카탈로그-랜딩-UI/02-01-SUMMARY.md
+Last session: 2026-03-09T11:25:35.992Z
+Stopped at: Completed 02-02-PLAN.md (Phase 2 완료)
+Resume file: None
