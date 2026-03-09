@@ -1,0 +1,208 @@
+{
+  "name": "[마케팅] 경쟁사 뉴스 모니터링 - 평일 오전/오후",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9,14 * * 1-5"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger-node",
+      "name": "매일 경쟁사 뉴스 수집",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://openapi.naver.com/v1/search/news.json",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Naver-Client-Id",
+              "value": "={{ $env.NAVER_CLIENT_ID }}"
+            },
+            {
+              "name": "X-Naver-Client-Secret",
+              "value": "={{ $env.NAVER_CLIENT_SECRET }}"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "경쟁사명"
+            },
+            {
+              "name": "display",
+              "value": "10"
+            },
+            {
+              "name": "sort",
+              "value": "date"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "naver-news-node",
+      "name": "네이버 뉴스 검색",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const response = $input.first().json;\nconst items = response.items || [];\n\nconst news = items.slice(0, 5).map((item, i) => {\n  const title = item.title.replace(/<[^>]*>/g, '').replace(/&quot;/g, '\"').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');\n  const description = item.description.replace(/<[^>]*>/g, '').replace(/&quot;/g, '\"').replace(/&amp;/g, '&');\n  const pubDate = new Date(item.pubDate).toLocaleDateString('ko-KR');\n  return `${i + 1}. ${title}\\n   ${description.substring(0, 80)}...\\n   (${pubDate}) ${item.link}`;\n});\n\nconst summary = news.length > 0\n  ? `경쟁사 뉴스 ${news.length}건 발견:\\n\\n${news.join('\\n\\n')}`\n  : '금일 경쟁사 관련 뉴스가 없습니다.';\n\nreturn [{ json: { newsSummary: summary, newsCount: news.length } }];"
+      },
+      "id": "code-node",
+      "name": "뉴스 정리",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "resource": "text",
+        "operation": "message",
+        "modelId": "gpt-4o-mini",
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "당신은 경쟁사 동향 분석 전문가입니다. 주어진 뉴스를 분석하여 핵심 동향을 3줄로 요약하고, 시사점 1줄을 추가해주세요. 한글로 답변하세요."
+            },
+            {
+              "role": "user",
+              "content": "={{ $json.newsSummary }}"
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0.5
+        }
+      },
+      "id": "openai-node",
+      "name": "AI 동향 분석",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.3,
+      "position": [850, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "placeholder-openai-api",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "placeholder-channel-id",
+          "mode": "id"
+        },
+        "text": "=📊 *경쟁사 동향 브리핑*\n\n{{ $json.message?.content || $json.text || '분석 결과 없음' }}",
+        "otherOptions": {}
+      },
+      "id": "slack-node",
+      "name": "동향 브리핑",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [1050, 300],
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "placeholder-slack-oauth2",
+          "name": "Slack OAuth2 계정"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "매일 경쟁사 뉴스 수집": {
+      "main": [
+        [
+          {
+            "node": "네이버 뉴스 검색",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "네이버 뉴스 검색": {
+      "main": [
+        [
+          {
+            "node": "뉴스 정리",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "뉴스 정리": {
+      "main": [
+        [
+          {
+            "node": "AI 동향 분석",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI 동향 분석": {
+      "main": [
+        [
+          {
+            "node": "동향 브리핑",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "",
+    "timezone": "Asia/Seoul",
+    "saveExecutionProgress": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "executionTimeout": 3600
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2026-03-09T00:00:00.000Z",
+      "updatedAt": "2026-03-09T00:00:00.000Z",
+      "id": "marketing",
+      "name": "마케팅"
+    },
+    {
+      "createdAt": "2026-03-09T00:00:00.000Z",
+      "updatedAt": "2026-03-09T00:00:00.000Z",
+      "id": "news-monitoring",
+      "name": "뉴스 모니터링"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-03-09T00:00:00.000Z",
+  "versionId": "1"
+}

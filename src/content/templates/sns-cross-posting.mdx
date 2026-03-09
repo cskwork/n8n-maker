@@ -1,0 +1,42 @@
+---
+title: "SNS 크로스 포스팅"
+description: "Google Sheets에 콘텐츠를 작성하면 Slack과 Telegram에 동시 배포하여 멀티 채널 운영을 자동화합니다"
+category: "marketing"
+useCase: "배포"
+difficulty: "beginner"
+pricing: "free"
+estimatedMinutes: 15
+credentials:
+  - "Google Sheets OAuth"
+  - "Slack OAuth"
+  - "Telegram Bot Token"
+tags:
+  - "SNS"
+  - "마케팅"
+  - "포스팅"
+  - "자동화"
+workflowJsonPath: "/workflows/sns-cross-posting.json"
+nodeCount: 5
+publishedAt: 2026-03-09
+---
+
+## 이 워크플로우는
+
+Google Sheets에 콘텐츠를 작성하면 Slack과 Telegram 채널에 동시에 배포합니다.
+하나의 시트에서 콘텐츠를 관리하고 여러 채널에 자동으로 퍼블리싱할 수 있습니다.
+
+1인 마케터, 소규모 사업자, 스타트업의 멀티 채널 운영 효율화에 적합합니다. 각 채널에 일일이 콘텐츠를 올리는 반복 작업을 자동화합니다.
+
+## 설정 가이드
+
+### Step 1: 크레덴셜 발급
+
+Google Sheets OAuth를 n8n에서 설정합니다. Slack 워크스페이스에서 OAuth 앱을 생성하고 Bot Token을 발급받습니다. Telegram에서 @BotFather로 봇을 생성하고 Bot Token을 받습니다.
+
+### Step 2: n8n 설정
+
+다운로드한 JSON 파일을 n8n에서 Import합니다. Google Sheets에 "제목", "내용", "이미지URL", "발행여부" 컬럼이 있는 시트를 준비합니다. 각 노드에 크레덴셜을 연결하고, Slack 채널 ID와 Telegram 채팅 ID를 설정합니다.
+
+### Step 3: 테스트 및 활성화
+
+시트에 테스트 콘텐츠를 작성하고(발행여부: N) 수동 실행하여 Slack과 Telegram에 정상 발행되는지 확인합니다. 활성화하면 매시간 자동으로 미발행 콘텐츠를 배포합니다.

@@ -1,0 +1,192 @@
+{
+  "name": "[마케팅] SNS 크로스 포스팅 - 매시간",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 * * * *"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger-node",
+      "name": "매시간 신규 콘텐츠 확인",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "placeholder-spreadsheet-id",
+          "mode": "id",
+          "cachedResultName": "SNS 콘텐츠"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "id",
+          "cachedResultName": "Sheet1"
+        },
+        "options": {}
+      },
+      "id": "google-sheets-node",
+      "name": "콘텐츠 가져오기",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [450, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "placeholder-sheets-oauth2",
+          "name": "Google Sheets OAuth2 계정"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": ""
+          },
+          "conditions": [
+            {
+              "id": "1",
+              "leftValue": "={{ $json['발행여부'] }}",
+              "rightValue": "N",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-node",
+      "name": "미발행 콘텐츠?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "placeholder-channel-id",
+          "mode": "id"
+        },
+        "text": "=📢 *{{ $json['제목'] }}*\n\n{{ $json['내용'] }}\n\n{{ $json['이미지URL'] ? '🖼️ 이미지: ' + $json['이미지URL'] : '' }}",
+        "otherOptions": {}
+      },
+      "id": "slack-node",
+      "name": "슬랙 발행",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [850, 200],
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "placeholder-slack-oauth2",
+          "name": "Slack OAuth2 계정"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "placeholder-chat-id",
+        "text": "=📢 {{ $json['제목'] }}\n\n{{ $json['내용'] }}",
+        "additionalFields": {}
+      },
+      "id": "telegram-node",
+      "name": "텔레그램 발행",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [850, 400],
+      "credentials": {
+        "telegramApi": {
+          "id": "placeholder-telegram-bot",
+          "name": "Telegram Bot Token"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "매시간 신규 콘텐츠 확인": {
+      "main": [
+        [
+          {
+            "node": "콘텐츠 가져오기",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "콘텐츠 가져오기": {
+      "main": [
+        [
+          {
+            "node": "미발행 콘텐츠?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "미발행 콘텐츠?": {
+      "main": [
+        [
+          {
+            "node": "슬랙 발행",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "텔레그램 발행",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "",
+    "timezone": "Asia/Seoul",
+    "saveExecutionProgress": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "executionTimeout": 3600
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2026-03-09T00:00:00.000Z",
+      "updatedAt": "2026-03-09T00:00:00.000Z",
+      "id": "marketing",
+      "name": "마케팅"
+    },
+    {
+      "createdAt": "2026-03-09T00:00:00.000Z",
+      "updatedAt": "2026-03-09T00:00:00.000Z",
+      "id": "sns",
+      "name": "SNS"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-03-09T00:00:00.000Z",
+  "versionId": "1"
+}

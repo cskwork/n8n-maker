@@ -1,0 +1,192 @@
+{
+  "name": "[마케팅] 카카오톡 일정 알림 - 매일 아침",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * *"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger-node",
+      "name": "매일 아침 일정 확인",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "primary",
+          "mode": "id"
+        },
+        "returnAll": true,
+        "options": {
+          "timeMin": "={{ $now.startOf('day').toISO() }}",
+          "timeMax": "={{ $now.endOf('day').toISO() }}"
+        }
+      },
+      "id": "google-calendar-node",
+      "name": "오늘 일정 조회",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 3,
+      "position": [450, 300],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "placeholder-google-calendar-oauth2",
+          "name": "Google Calendar OAuth2 계정"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const items = $input.all();\n\nif (items.length === 0) {\n  return [{ json: { hasEvents: false, message: '오늘 일정이 없습니다.' } }];\n}\n\nconst events = items.map(item => {\n  const start = item.json.start?.dateTime || item.json.start?.date || '';\n  const end = item.json.end?.dateTime || item.json.end?.date || '';\n  const summary = item.json.summary || '(제목 없음)';\n  \n  const startTime = start ? new Date(start).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false }) : '종일';\n  const endTime = end ? new Date(end).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false }) : '';\n  \n  return `${startTime}~${endTime} ${summary}`;\n});\n\nconst today = new Date().toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'long' });\nconst message = `📅 ${today} 일정 (${events.length}건)\\n\\n${events.join('\\n')}`;\n\nreturn [{ json: { hasEvents: true, message, eventCount: events.length } }];"
+      },
+      "id": "code-node",
+      "name": "일정 메시지 생성",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": ""
+          },
+          "conditions": [
+            {
+              "id": "1",
+              "leftValue": "={{ $json.hasEvents }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-node",
+      "name": "일정 있는지?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://kapi.kakao.com/v2/api/talk/memo/default/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.KAKAO_ACCESS_TOKEN }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/x-www-form-urlencoded"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "string",
+        "body": "=template_object={{ JSON.stringify({ object_type: 'text', text: $json.message, link: { web_url: 'https://calendar.google.com' }, button_title: '캘린더 열기' }) }}",
+        "options": {}
+      },
+      "id": "kakao-node",
+      "name": "카카오톡 나에게 보내기",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1050, 200]
+    }
+  ],
+  "connections": {
+    "매일 아침 일정 확인": {
+      "main": [
+        [
+          {
+            "node": "오늘 일정 조회",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "오늘 일정 조회": {
+      "main": [
+        [
+          {
+            "node": "일정 메시지 생성",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "일정 메시지 생성": {
+      "main": [
+        [
+          {
+            "node": "일정 있는지?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "일정 있는지?": {
+      "main": [
+        [
+          {
+            "node": "카카오톡 나에게 보내기",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "",
+    "timezone": "Asia/Seoul",
+    "saveExecutionProgress": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "executionTimeout": 3600
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2026-03-09T00:00:00.000Z",
+      "updatedAt": "2026-03-09T00:00:00.000Z",
+      "id": "marketing",
+      "name": "마케팅"
+    },
+    {
+      "createdAt": "2026-03-09T00:00:00.000Z",
+      "updatedAt": "2026-03-09T00:00:00.000Z",
+      "id": "korean-service",
+      "name": "한국서비스"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-03-09T00:00:00.000Z",
+  "versionId": "1"
+}

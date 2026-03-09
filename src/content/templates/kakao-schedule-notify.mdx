@@ -1,0 +1,54 @@
+---
+title: "카카오톡 일정 알림"
+description: "Google Calendar 오늘 일정을 매일 아침 카카오톡 나에게 보내기로 자동 알림합니다"
+category: "marketing"
+useCase: "알림"
+difficulty: "beginner"
+pricing: "free"
+estimatedMinutes: 20
+credentials:
+  - "Google Calendar OAuth"
+  - "카카오 REST API Key"
+tags:
+  - "카카오톡"
+  - "일정"
+  - "한국서비스"
+  - "알림"
+workflowJsonPath: "/workflows/kakao-schedule-notify.json"
+nodeCount: 5
+publishedAt: 2026-03-09
+---
+
+## 이 워크플로우는
+
+Google Calendar에서 오늘 일정을 매일 아침 자동으로 확인하여 카카오톡 나에게 보내기로 알려줍니다.
+아침마다 캘린더를 열어보지 않아도 카카오톡으로 오늘 일정을 한눈에 확인할 수 있습니다.
+
+일정 관리를 카카오톡으로 편하게 받고 싶은 직장인, 마케터, 프리랜서에게 적합합니다.
+
+## 설정 가이드
+
+### Step 1: 크레덴셜 발급
+
+**카카오 REST API 설정:**
+
+1. [카카오 개발자센터](https://developers.kakao.com)에 가입하고 앱을 등록합니다
+2. 앱 설정 > 앱 키에서 **REST API 키**를 확인합니다
+3. 카카오 로그인 > 동의항목에서 **"카카오톡 메시지 전송"** 권한을 활성화합니다
+4. 카카오 로그인으로 **Access Token**을 발급받습니다
+
+**중요:** "나에게 보내기" API는 본인 인증이 필수이며, Access Token이 필요합니다. 토큰 유효기간은 기본 6시간이며, Refresh Token(2개월)으로 갱신할 수 있습니다. 장기 운용 시 토큰 자동 갱신 워크플로우를 별도로 구성하는 것을 권장합니다.
+
+**Google Calendar OAuth 설정:**
+
+1. n8n의 Credentials 메뉴에서 Google Calendar OAuth2를 추가합니다
+2. Google Cloud Console에서 OAuth 동의 화면 설정 후 클라이언트 ID/Secret을 발급받습니다
+3. n8n에서 Google 계정 연동을 완료합니다
+
+### Step 2: n8n 설정
+
+다운로드한 JSON 파일을 n8n의 Workflows 메뉴에서 Import합니다. n8n 환경변수에 `KAKAO_ACCESS_TOKEN`을 설정합니다. Google Calendar 크레덴셜을 "오늘 일정 조회" 노드에 연결합니다.
+
+### Step 3: 테스트 및 활성화
+
+워크플로우를 수동 실행하여 카카오톡으로 오늘 일정 알림이 수신되는지 확인합니다. 정상 동작을 확인한 후 워크플로우를 활성화하면 매일 아침 8시에 자동으로 실행됩니다.
