@@ -101,40 +101,40 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INFRA-01 | Phase 1 | Pending |
-| INFRA-02 | Phase 1 | Pending |
-| INFRA-03 | Phase 1 | Pending |
-| CATA-01 | Phase 2 | Pending |
-| CATA-02 | Phase 2 | Pending |
-| CATA-03 | Phase 2 | Pending |
-| CATA-04 | Phase 2 | Pending |
-| DETAIL-01 | Phase 3 | Pending |
-| DETAIL-02 | Phase 3 | Pending |
-| DETAIL-03 | Phase 3 | Pending |
-| DETAIL-04 | Phase 3 | Pending |
-| DETAIL-05 | Phase 3 | Pending |
-| DETAIL-06 | Phase 3 | Pending |
-| VISUAL-01 | Phase 3 | Pending |
-| VISUAL-02 | Phase 3 | Pending |
-| VISUAL-03 | Phase 3 | Pending |
-| SEO-01 | Phase 4 | Pending |
-| SEO-02 | Phase 4 | Pending |
-| SEO-03 | Phase 4 | Pending |
-| CONT-01 | Phase 5 | Pending |
-| CONT-02 | Phase 5 | Pending |
-| CONT-03 | Phase 5 | Pending |
-| CONT-04 | Phase 5 | Pending |
-| CONT-05 | Phase 5 | Pending |
-| CONT-06 | Phase 5 | Pending |
-| BIZ-01 | Phase 6 | Pending |
-| BIZ-02 | Phase 6 | Pending |
-| BIZ-03 | Phase 6 | Pending |
+| INFRA-01 | Phase 1: 프로젝트 기반 구축 | Pending |
+| INFRA-02 | Phase 1: 프로젝트 기반 구축 | Pending |
+| INFRA-03 | Phase 1: 프로젝트 기반 구축 | Pending |
+| CATA-01 | Phase 2: 카탈로그 & 랜딩 UI | Pending |
+| CATA-02 | Phase 2: 카탈로그 & 랜딩 UI | Pending |
+| CATA-03 | Phase 2: 카탈로그 & 랜딩 UI | Pending |
+| CATA-04 | Phase 2: 카탈로그 & 랜딩 UI | Pending |
+| DETAIL-01 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
+| DETAIL-02 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
+| DETAIL-03 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
+| DETAIL-04 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
+| DETAIL-05 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
+| DETAIL-06 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
+| VISUAL-01 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
+| VISUAL-02 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
+| VISUAL-03 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
+| BIZ-01 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
+| BIZ-02 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
+| BIZ-03 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
+| CONT-01 | Phase 4: 콘텐츠 제작 | Pending |
+| CONT-02 | Phase 4: 콘텐츠 제작 | Pending |
+| CONT-03 | Phase 4: 콘텐츠 제작 | Pending |
+| CONT-04 | Phase 4: 콘텐츠 제작 | Pending |
+| CONT-05 | Phase 4: 콘텐츠 제작 | Pending |
+| CONT-06 | Phase 4: 콘텐츠 제작 | Pending |
+| SEO-01 | Phase 5: SEO & 런칭 | Pending |
+| SEO-02 | Phase 5: SEO & 런칭 | Pending |
+| SEO-03 | Phase 5: SEO & 런칭 | Pending |
 
 **Coverage:**
 - v1 requirements: 28 total
 - Mapped to phases: 28
-- Unmapped: 0 ✓
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-09*
-*Last updated: 2026-03-09 after initial definition*
+*Last updated: 2026-03-09 after roadmap creation*
