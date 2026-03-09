@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Phase 3 진행 중
-stopped_at: Completed 03-02-PLAN.md
+stopped_at: Completed 03-01-PLAN.md
 last_updated: "2026-03-09T12:28:37.798Z"
-last_activity: 2026-03-09 — Plan 03-02 실행 완료 (/pricing 프리미엄 안내 페이지 생성)
+last_activity: 2026-03-09 — Plan 03-01 실행 완료 (상세 페이지 핵심 구조 + CTA + 크레덴셜 + 관련 템플릿)
 progress:
   total_phases: 5
   completed_phases: 2
@@ -26,18 +26,18 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 ## Current Position
 
 Phase: 3 of 5 (상세 페이지 & 비즈니스 모델) - IN PROGRESS
-Plan: 2 of 3 in current phase (03-02 완료)
+Plan: 2 of 3 in current phase (03-01, 03-02 완료)
 Status: Phase 3 진행 중
-Last activity: 2026-03-09 — Plan 03-02 실행 완료 (/pricing 프리미엄 안내 페이지 생성)
+Last activity: 2026-03-09 — Plan 03-01 실행 완료 (상세 페이지 핵심 구조 + CTA + 크레덴셜 + 관련 템플릿)
 
-Progress: [███████░░░] 71%
+Progress: [█████████░] 86%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
+- Total plans completed: 6
 - Average duration: 4 min
-- Total execution time: 0.35 hours
+- Total execution time: 0.4 hours
 
 **By Phase:**
 
@@ -45,10 +45,10 @@ Progress: [███████░░░] 71%
 |-------|-------|-------|----------|
 | 1. 프로젝트 기반 구축 | 2/2 | 12 min | 6 min |
 | 2. 카탈로그 & 랜딩 UI | 2/2 | 6 min | 3 min |
-| 3. 상세 페이지 & 비즈니스 모델 | 1/3 | 2 min | 2 min |
+| 3. 상세 페이지 & 비즈니스 모델 | 2/3 | 5 min | 2.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-02 (8 min), 02-01 (3 min), 02-02 (3 min), 03-02 (2 min)
+- Last 5 plans: 01-02 (8 min), 02-01 (3 min), 02-02 (3 min), 03-01 (3 min), 03-02 (2 min)
 - Trend: improving
 
 *Updated after each plan completion*
@@ -75,6 +75,9 @@ Recent decisions affecting current work:
 - (02-02) 인기 템플릿을 categoryOrder 배열 기반 균형 선택으로 변경 (slice(0,3) 대체)
 - (02-02) TemplateCard 컴포넌트 재사용으로 인라인 카드 마크업 제거
 - (02-02) 히어로 CTA 아래 가로 인라인 통계 배치
+- (03-01) Tailwind Typography 미설치 — arbitrary selector([&_h2] 등)로 MDX 스타일링 직접 처리
+- (03-01) Google Form URL/entry ID를 상수 플레이스홀더로 분리 (TODO 코멘트로 교체 안내)
+- (03-01) categoryLabel/difficultyLabel 매핑을 상세 페이지 내부에 별도 정의 (Astro 컴포넌트 export 제약)
 - (03-02) details/summary 네이티브 HTML로 FAQ 아코디언 구현 (JS 없이 동작)
 - (03-02) 프리미엄 카드에 amber-400 border + 추천 배지로 시각적 강조
 - (03-02) Google Form URL을 상수로 분리해 TODO 코멘트로 교체 안내
@@ -90,6 +93,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-09T12:26:21Z
-Stopped at: Completed 03-02-PLAN.md
-Resume file: .planning/phases/03-detail-page-business-model/03-02-SUMMARY.md
+Last session: 2026-03-09T12:28:00Z
+Stopped at: Completed 03-01-PLAN.md
+Resume file: .planning/phases/03-detail-page-business-model/03-01-SUMMARY.md

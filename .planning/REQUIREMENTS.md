@@ -20,12 +20,12 @@
 
 ### 템플릿 상세 (DETAIL)
 
-- [ ] **DETAIL-01**: 각 템플릿의 상세 페이지에서 설명, 사용 시나리오, 필요 크레덴셜 목록을 볼 수 있다
+- [x] **DETAIL-01**: 각 템플릿의 상세 페이지에서 설명, 사용 시나리오, 필요 크레덴셜 목록을 볼 수 있다
 - [ ] **DETAIL-02**: 상세 페이지에서 n8n-demo-component로 워크플로우 다이어그램을 인터랙티브하게 볼 수 있다
-- [ ] **DETAIL-03**: 무료 템플릿의 JSON을 다운로드 버튼으로 즉시 다운로드할 수 있다
-- [ ] **DETAIL-04**: 프리미엄 템플릿은 다이어그램 프리뷰만 제공하고 Google Form 문의로 연결된다
-- [ ] **DETAIL-05**: 각 템플릿에 난이도(초급/중급/고급)와 예상 설정 시간이 표시된다
-- [ ] **DETAIL-06**: 단계별 설정 가이드(크레덴셜 발급 ~ n8n 활성화)가 한글로 제공된다
+- [x] **DETAIL-03**: 무료 템플릿의 JSON을 다운로드 버튼으로 즉시 다운로드할 수 있다
+- [x] **DETAIL-04**: 프리미엄 템플릿은 다이어그램 프리뷰만 제공하고 Google Form 문의로 연결된다
+- [x] **DETAIL-05**: 각 템플릿에 난이도(초급/중급/고급)와 예상 설정 시간이 표시된다
+- [x] **DETAIL-06**: 단계별 설정 가이드(크레덴셜 발급 ~ n8n 활성화)가 한글로 제공된다
 
 ### 워크플로우 시각화 (VISUAL)
 
@@ -50,8 +50,8 @@
 
 ### 비즈니스 모델 (BIZ)
 
-- [ ] **BIZ-01**: 카테고리당 2-3개 무료 템플릿이 즉시 다운로드 가능하다
-- [ ] **BIZ-02**: 프리미엄 템플릿은 Google Form 문의 연결로 구매 요청할 수 있다
+- [x] **BIZ-01**: 카테고리당 2-3개 무료 템플릿이 즉시 다운로드 가능하다
+- [x] **BIZ-02**: 프리미엄 템플릿은 Google Form 문의 연결로 구매 요청할 수 있다
 - [x] **BIZ-03**: 가격 정보 또는 프리미엄 안내 페이지가 존재한다
 
 ## v2 Requirements
@@ -108,17 +108,17 @@
 | CATA-02 | Phase 2: 카탈로그 & 랜딩 UI | Complete |
 | CATA-03 | Phase 2: 카탈로그 & 랜딩 UI | Complete |
 | CATA-04 | Phase 2: 카탈로그 & 랜딩 UI | Complete |
-| DETAIL-01 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
+| DETAIL-01 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |
 | DETAIL-02 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
-| DETAIL-03 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
-| DETAIL-04 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
-| DETAIL-05 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
-| DETAIL-06 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
+| DETAIL-03 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |
+| DETAIL-04 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |
+| DETAIL-05 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |
+| DETAIL-06 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |
 | VISUAL-01 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
 | VISUAL-02 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
 | VISUAL-03 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
-| BIZ-01 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
-| BIZ-02 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
+| BIZ-01 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |
+| BIZ-02 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |
 | BIZ-03 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |
 | CONT-01 | Phase 4: 콘텐츠 제작 | Pending |
 | CONT-02 | Phase 4: 콘텐츠 제작 | Pending |
