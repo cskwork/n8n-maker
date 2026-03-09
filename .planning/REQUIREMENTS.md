@@ -41,12 +41,12 @@
 
 ### 콘텐츠 (CONT)
 
-- [ ] **CONT-01**: 금융 자동화 템플릿 4-5개가 포함된다 (DART 공시, 주가 모니터링, 인보이스 처리 등)
+- [x] **CONT-01**: 금융 자동화 템플릿 4-5개가 포함된다 (DART 공시, 주가 모니터링, 인보이스 처리 등)
 - [ ] **CONT-02**: 한국 서비스 연동 템플릿 4-5개가 포함된다 (카카오톡, 네이버, 사람인, DART)
-- [ ] **CONT-03**: 마케팅 자동화 템플릿 3-4개가 포함된다
+- [x] **CONT-03**: 마케팅 자동화 템플릿 3-4개가 포함된다
 - [ ] **CONT-04**: HR/IT 자동화 템플릿 3-4개가 포함된다
-- [ ] **CONT-05**: 각 템플릿에 유효한 n8n 워크플로우 JSON이 포함된다
-- [ ] **CONT-06**: 한국 서비스 API 설정 가이드가 포함된다 (카카오톡, 네이버, 사람인, DART)
+- [x] **CONT-05**: 각 템플릿에 유효한 n8n 워크플로우 JSON이 포함된다
+- [x] **CONT-06**: 한국 서비스 API 설정 가이드가 포함된다 (카카오톡, 네이버, 사람인, DART)
 
 ### 비즈니스 모델 (BIZ)
 
@@ -120,12 +120,12 @@
 | BIZ-01 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |
 | BIZ-02 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |
 | BIZ-03 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |
-| CONT-01 | Phase 4: 콘텐츠 제작 | Pending |
+| CONT-01 | Phase 4: 콘텐츠 제작 | Complete |
 | CONT-02 | Phase 4: 콘텐츠 제작 | Pending |
-| CONT-03 | Phase 4: 콘텐츠 제작 | Pending |
+| CONT-03 | Phase 4: 콘텐츠 제작 | Complete |
 | CONT-04 | Phase 4: 콘텐츠 제작 | Pending |
-| CONT-05 | Phase 4: 콘텐츠 제작 | Pending |
-| CONT-06 | Phase 4: 콘텐츠 제작 | Pending |
+| CONT-05 | Phase 4: 콘텐츠 제작 | Complete |
+| CONT-06 | Phase 4: 콘텐츠 제작 | Complete |
 | SEO-01 | Phase 5: SEO & 런칭 | Pending |
 | SEO-02 | Phase 5: SEO & 런칭 | Pending |
 | SEO-03 | Phase 5: SEO & 런칭 | Pending |

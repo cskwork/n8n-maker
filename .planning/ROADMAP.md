@@ -110,5 +110,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 1. 프로젝트 기반 구축 | 2/2 | Complete | 2026-03-09 |
 | 2. 카탈로그 & 랜딩 UI | 2/2 | Complete   | 2026-03-09 |
 | 3. 상세 페이지 & 비즈니스 모델 | 3/3 | Complete   | 2026-03-09 |
-| 4. 콘텐츠 제작 | 0/4 | Not started | - |
+| 4. 콘텐츠 제작 | 2/4 | In Progress|  |
 | 5. SEO & 런칭 | 0/3 | Not started | - |
