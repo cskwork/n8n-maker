@@ -1,0 +1,177 @@
+{
+  "name": "[IT] 서버 헬스 모니터링 - 5분 간격",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/5 * * * *"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger-node",
+      "name": "5분마다 상태 체크",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://your-server.com",
+        "options": {
+          "allowUnauthorizedCerts": true,
+          "timeout": 10000
+        }
+      },
+      "id": "http-health-check",
+      "name": "서버 상태 확인",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [450, 300],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const item = $input.first().json;\nconst statusCode = item.statusCode || item.headers?.['status-code'] || 0;\nconst hasError = item.error !== undefined || statusCode === 0;\nconst isDown = hasError || statusCode >= 400;\n\nreturn [{\n  json: {\n    isDown: isDown,\n    statusCode: statusCode || 'N/A',\n    url: 'https://your-server.com',\n    checkedAt: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),\n    errorMessage: item.error?.message || item.message || (isDown ? `HTTP ${statusCode}` : '정상')\n  }\n}];"
+      },
+      "id": "code-check-status",
+      "name": "상태 판단",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": ""
+          },
+          "conditions": [
+            {
+              "id": "1",
+              "leftValue": "={{ $json.isDown }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-server-down",
+      "name": "서버 다운?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C_YOUR_CHANNEL_ID",
+          "mode": "id"
+        },
+        "text": "=:rotating_light: *서버 다운 감지!*\n\n*URL:* {{ $json.url }}\n*상태 코드:* {{ $json.statusCode }}\n*에러:* {{ $json.errorMessage }}\n*확인 시각:* {{ $json.checkedAt }}\n\n즉시 확인이 필요합니다!",
+        "otherOptions": {}
+      },
+      "id": "slack-alert-node",
+      "name": "긴급 알림",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [1050, 200],
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "placeholder-slack-oauth2",
+          "name": "Slack OAuth2 계정"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "5분마다 상태 체크": {
+      "main": [
+        [
+          {
+            "node": "서버 상태 확인",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "서버 상태 확인": {
+      "main": [
+        [
+          {
+            "node": "상태 판단",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "상태 판단": {
+      "main": [
+        [
+          {
+            "node": "서버 다운?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "서버 다운?": {
+      "main": [
+        [
+          {
+            "node": "긴급 알림",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "",
+    "timezone": "Asia/Seoul",
+    "saveExecutionProgress": true,
+    "executionTimeout": 3600,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2026-03-09T00:00:00.000Z",
+      "updatedAt": "2026-03-09T00:00:00.000Z",
+      "id": "devops",
+      "name": "DevOps"
+    },
+    {
+      "createdAt": "2026-03-09T00:00:00.000Z",
+      "updatedAt": "2026-03-09T00:00:00.000Z",
+      "id": "monitoring",
+      "name": "모니터링"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-03-09T00:00:00.000Z",
+  "versionId": "1"
+}

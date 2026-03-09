@@ -1,0 +1,43 @@
+---
+title: "일일 업무 보고 자동화"
+description: "매일 오후 5시에 Slack 채널의 메시지를 수집하고 OpenAI로 업무 요약을 생성하여 Notion에 일일 보고서를 자동 작성합니다"
+category: "hr"
+useCase: "보고"
+difficulty: "intermediate"
+pricing: "free"
+estimatedMinutes: 20
+credentials:
+  - "Slack OAuth"
+  - "OpenAI API Key"
+  - "Notion API Key"
+tags:
+  - "업무보고"
+  - "AI"
+  - "자동화"
+workflowJsonPath: "/workflows/daily-work-report.json"
+nodeCount: 6
+publishedAt: 2026-03-09
+---
+
+## 이 워크플로우는
+
+매일 오후 5시(평일)에 Slack 채널의 오늘 메시지를 자동으로 수집하고,
+OpenAI GPT가 팀의 업무 내용을 요약하여 일일 보고서를 생성합니다.
+완성된 보고서는 Notion 데이터베이스에 자동 저장되고, Slack으로 완료 알림을 보냅니다.
+
+팀장이나 매니저가 매일 반복하는 보고서 작성 시간을 대폭 절약할 수 있습니다.
+
+## 주요 기능
+
+- **자동 메시지 수집**: Slack 채널의 당일 메시지를 시간순으로 수집
+- **AI 업무 요약**: GPT가 완료 업무, 진행 중 업무, 이슈를 구분하여 정리
+- **Notion 자동 저장**: 날짜별 일일 보고서 페이지 자동 생성
+- **완료 알림**: 보고서 생성 후 Slack으로 노션 링크 전송
+
+## 설정 가이드
+
+1. JSON 파일을 n8n에 import합니다
+2. Slack OAuth 인증을 설정하고, 수집할 채널 ID를 입력합니다
+3. OpenAI API 키를 등록합니다
+4. Notion API 키와 보고서를 저장할 데이터베이스 ID를 설정합니다
+5. 수동 실행으로 테스트한 뒤, 스케줄을 활성화합니다
