@@ -1,41 +1,139 @@
 ---
-import '../styles/global.css';
+import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
 const allTemplates = await getCollection('templates');
+const sampleTemplates = allTemplates.slice(0, 3);
+
+// 카테고리 정보
+const categories = [
+  {
+    name: '금융',
+    slug: 'finance',
+    description: 'DART 공시, 주가 알림, 재무 보고서 자동화',
+    icon: '\uD83C\uDFE6',
+  },
+  {
+    name: '마케팅',
+    slug: 'marketing',
+    description: 'SNS 자동 포스팅, 리드 수집, 캠페인 관리',
+    icon: '\uD83D\uDCE3',
+  },
+  {
+    name: 'HR',
+    slug: 'hr',
+    description: '채용공고 수집, 지원자 관리, 온보딩 자동화',
+    icon: '\uD83D\uDC65',
+  },
+  {
+    name: 'IT/DevOps',
+    slug: 'it',
+    description: '서버 모니터링, 배포 자동화, 알림 통합',
+    icon: '\u2699\uFE0F',
+  },
+];
+
+// 카테고리 한글 매핑
+const categoryLabel: Record<string, string> = {
+  finance: '금융',
+  marketing: '마케팅',
+  hr: 'HR',
+  it: 'IT/DevOps',
+};
+
+// 난이도 한글 매핑
+const difficultyLabel: Record<string, string> = {
+  beginner: '초급',
+  intermediate: '중급',
+  advanced: '고급',
+};
 ---
 
-<!doctype html>
-<html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="n8n 워크플로우 템플릿 마켓플레이스 - 비개발자를 위한 업무 자동화" />
-    <title>n8n 마켓플레이스</title>
-  </head>
-  <body class="min-h-screen bg-surface-50 text-surface-900 font-sans">
-    <main class="max-w-4xl mx-auto px-4 py-16">
-      <h1 class="text-4xl font-bold text-primary-600 mb-4">n8n 마켓플레이스</h1>
-      <p class="text-lg text-surface-700 mb-4">비개발자를 위한 n8n 워크플로우 템플릿 마켓플레이스</p>
+<BaseLayout title="홈">
+  <!-- 히어로 섹션 -->
+  <section class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-3xl md:text-5xl font-bold text-surface-900 mb-4">
+        n8n 워크플로우 마켓플레이스
+      </h1>
+      <p class="text-lg text-surface-600 mb-8 max-w-2xl mx-auto">
+        비개발자를 위한 업무 자동화 템플릿 &#8212; 복사해서 바로 사용하세요
+      </p>
+      <a
+        href="#categories"
+        class="inline-flex items-center px-6 py-3 bg-primary-500 text-white font-semibold rounded-lg hover:bg-primary-600 transition-colors text-lg"
+      >
+        템플릿 둘러보기
+      </a>
+    </div>
+  </section>
 
-      <section>
-        <h2 class="text-xl font-bold text-surface-800 mb-4">워크플로우 템플릿 ({allTemplates.length}개)</h2>
-        <ul class="space-y-2">
-          {allTemplates.map((template) => (
-            <li class="p-4 bg-white rounded-lg border border-surface-200">
-              <h3 class="font-bold text-primary-600">{template.data.title}</h3>
-              <p class="text-sm text-surface-700">{template.data.description}</p>
-              <div class="flex gap-2 mt-2">
-                <span class="text-sm bg-primary-100 text-primary-700 px-2 py-0.5 rounded">{template.data.category}</span>
-                <span class="text-sm bg-surface-100 text-surface-700 px-2 py-0.5 rounded">{template.data.difficulty}</span>
-                <span class={`text-sm px-2 py-0.5 rounded ${template.data.pricing === 'free' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
-                  {template.data.pricing === 'free' ? '무료' : '프리미엄'}
-                </span>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
-    </main>
-  </body>
-</html>
+  <!-- 카테고리 미리보기 섹션 -->
+  <section id="categories" class="py-16 bg-surface-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-bold text-surface-900 mb-8 text-center">
+        카테고리별 템플릿
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {categories.map((cat) => (
+          <a
+            href={`/n8n-marketplace/category/${cat.slug}`}
+            class="block p-6 bg-white rounded-xl border border-surface-200 hover:border-primary-300 hover:shadow-md transition-all"
+          >
+            <div class="text-3xl mb-3">{cat.icon}</div>
+            <h3 class="text-lg font-bold text-surface-900 mb-2">{cat.name}</h3>
+            <p class="text-sm text-surface-500">{cat.description}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 샘플 템플릿 섹션 -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-bold text-surface-900 mb-8 text-center">
+        인기 템플릿
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {sampleTemplates.map((template) => (
+          <div class="p-6 bg-white rounded-xl border border-surface-200 hover:shadow-md transition-shadow">
+            <h3 class="font-bold text-surface-900 mb-2">{template.data.title}</h3>
+            <p class="text-sm text-surface-500 mb-4 line-clamp-2">{template.data.description}</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="text-xs bg-primary-50 text-primary-700 px-2 py-1 rounded-full font-medium">
+                {categoryLabel[template.data.category] || template.data.category}
+              </span>
+              <span class="text-xs bg-surface-100 text-surface-600 px-2 py-1 rounded-full">
+                {difficultyLabel[template.data.difficulty] || template.data.difficulty}
+              </span>
+              <span class={`text-xs px-2 py-1 rounded-full ${template.data.pricing === 'free' ? 'bg-green-50 text-green-700' : 'bg-amber-50 text-amber-700'}`}>
+                {template.data.pricing === 'free' ? '무료' : '프리미엄'}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 시작하기 섹션 -->
+  <section id="get-started" class="py-16 bg-primary-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-2xl md:text-3xl font-bold text-surface-900 mb-4">
+        지금 바로 시작하세요
+      </h2>
+      <p class="text-surface-600 mb-8 max-w-xl mx-auto">
+        n8n을 설치하고, 마음에 드는 워크플로우 템플릿을 다운로드해서 업무를 자동화하세요.
+      </p>
+      <a
+        href="https://docs.n8n.io/hosting/installation/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center px-6 py-3 bg-primary-500 text-white font-semibold rounded-lg hover:bg-primary-600 transition-colors"
+      >
+        n8n 설치 가이드
+      </a>
+    </div>
+  </section>
+</BaseLayout>
