@@ -21,7 +21,7 @@
 ### 템플릿 상세 (DETAIL)
 
 - [x] **DETAIL-01**: 각 템플릿의 상세 페이지에서 설명, 사용 시나리오, 필요 크레덴셜 목록을 볼 수 있다
-- [ ] **DETAIL-02**: 상세 페이지에서 n8n-demo-component로 워크플로우 다이어그램을 인터랙티브하게 볼 수 있다
+- [x] **DETAIL-02**: 상세 페이지에서 n8n-demo-component로 워크플로우 다이어그램을 인터랙티브하게 볼 수 있다
 - [x] **DETAIL-03**: 무료 템플릿의 JSON을 다운로드 버튼으로 즉시 다운로드할 수 있다
 - [x] **DETAIL-04**: 프리미엄 템플릿은 다이어그램 프리뷰만 제공하고 Google Form 문의로 연결된다
 - [x] **DETAIL-05**: 각 템플릿에 난이도(초급/중급/고급)와 예상 설정 시간이 표시된다
@@ -29,9 +29,9 @@
 
 ### 워크플로우 시각화 (VISUAL)
 
-- [ ] **VISUAL-01**: n8n-demo-component(CDN)로 워크플로우 JSON을 인터랙티브 다이어그램으로 렌더링한다
-- [ ] **VISUAL-02**: 다이어그램에서 각 노드의 타입과 연결 흐름을 시각적으로 확인할 수 있다
-- [ ] **VISUAL-03**: 다이어그램이 모바일에서도 적절히 표시된다 (스크롤/줌)
+- [x] **VISUAL-01**: n8n-demo-component(CDN)로 워크플로우 JSON을 인터랙티브 다이어그램으로 렌더링한다
+- [x] **VISUAL-02**: 다이어그램에서 각 노드의 타입과 연결 흐름을 시각적으로 확인할 수 있다
+- [x] **VISUAL-03**: 다이어그램이 모바일에서도 적절히 표시된다 (스크롤/줌)
 
 ### SEO 최적화 (SEO)
 
@@ -109,14 +109,14 @@
 | CATA-03 | Phase 2: 카탈로그 & 랜딩 UI | Complete |
 | CATA-04 | Phase 2: 카탈로그 & 랜딩 UI | Complete |
 | DETAIL-01 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |
-| DETAIL-02 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
+| DETAIL-02 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |
 | DETAIL-03 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |
 | DETAIL-04 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |
 | DETAIL-05 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |
 | DETAIL-06 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |
-| VISUAL-01 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
-| VISUAL-02 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
-| VISUAL-03 | Phase 3: 상세 페이지 & 비즈니스 모델 | Pending |
+| VISUAL-01 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |
+| VISUAL-02 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |
+| VISUAL-03 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |
 | BIZ-01 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |
 | BIZ-02 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |
 | BIZ-03 | Phase 3: 상세 페이지 & 비즈니스 모델 | Complete |

@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: 프로젝트 기반 구축** - Astro 5 + Tailwind CSS 4 프로젝트 셋업, Content Collections 스키마, 반응형 레이아웃
 - [x] **Phase 2: 카탈로그 & 랜딩 UI** - 업종별 카테고리 브라우징, 카드 레이아웃, 랜딩 페이지 (completed 2026-03-09)
-- [ ] **Phase 3: 상세 페이지 & 비즈니스 모델** - 템플릿 상세 페이지, 인터랙티브 다이어그램, 무료/프리미엄 구분, 다운로드/문의 흐름
+- [x] **Phase 3: 상세 페이지 & 비즈니스 모델** - 템플릿 상세 페이지, 인터랙티브 다이어그램, 무료/프리미엄 구분, 다운로드/문의 흐름 (completed 2026-03-09)
 - [ ] **Phase 4: 콘텐츠 제작** - 업종별 워크플로우 템플릿 15-20개, 한국 서비스 API 설정 가이드
 - [ ] **Phase 5: SEO & 런칭** - 메타 태그, sitemap, 키워드 랜딩 페이지, GitHub Pages 배포
 
@@ -62,9 +62,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — 템플릿 상세 페이지 핵심 구조 (동적 라우트 + 메타 배지 + CTA + 크레덴셜 + 관련 템플릿)
+- [x] 03-01-PLAN.md — 템플릿 상세 페이지 핵심 구조 (동적 라우트 + 메타 배지 + CTA + 크레덴셜 + 관련 템플릿)
 - [x] 03-02-PLAN.md — /pricing 프리미엄 안내 페이지
-- [ ] 03-03-PLAN.md — 워크플로우 다이어그램 시각화 (n8n-demo CDN + 폴백) + Phase 3 시각 검증
+- [x] 03-03-PLAN.md — 워크플로우 다이어그램 시각화 (n8n-demo CDN + 폴백) + Phase 3 시각 검증
 
 ### Phase 4: 콘텐츠 제작
 **Goal**: 4개 업종에 걸쳐 실제 동작하는 n8n 워크플로우 템플릿 15-20개와 한국 서비스 API 설정 가이드가 완비된다
@@ -109,6 +109,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 |-------|----------------|--------|-----------|
 | 1. 프로젝트 기반 구축 | 2/2 | Complete | 2026-03-09 |
 | 2. 카탈로그 & 랜딩 UI | 2/2 | Complete   | 2026-03-09 |
-| 3. 상세 페이지 & 비즈니스 모델 | 2/3 | In Progress|  |
+| 3. 상세 페이지 & 비즈니스 모델 | 3/3 | Complete   | 2026-03-09 |
 | 4. 콘텐츠 제작 | 0/4 | Not started | - |
 | 5. SEO & 런칭 | 0/3 | Not started | - |
