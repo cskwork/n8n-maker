@@ -46,7 +46,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — 카탈로그 컴포넌트(TemplateCard/SortDropdown/EmptyCategory) + 카테고리 동적 라우트 페이지
+- [x] 02-01-PLAN.md — 카탈로그 컴포넌트(TemplateCard/SortDropdown/EmptyCategory) + 카테고리 동적 라우트 페이지
 - [ ] 02-02-PLAN.md — 랜딩 페이지 개선 (히어로 통계, TemplateCard 전환, 모바일 2x2) + UI 시각 검증
 
 ### Phase 3: 상세 페이지 & 비즈니스 모델
@@ -109,7 +109,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. 프로젝트 기반 구축 | 2/2 | Complete | 2026-03-09 |
-| 2. 카탈로그 & 랜딩 UI | 0/2 | Not started | - |
+| 2. 카탈로그 & 랜딩 UI | 1/2 | In progress | - |
 | 3. 상세 페이지 & 비즈니스 모델 | 0/4 | Not started | - |
 | 4. 콘텐츠 제작 | 0/4 | Not started | - |
 | 5. SEO & 런칭 | 0/3 | Not started | - |
