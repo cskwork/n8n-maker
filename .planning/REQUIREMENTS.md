@@ -9,7 +9,7 @@
 
 - [x] **INFRA-01**: Astro 5 + Tailwind CSS 4 프로젝트 구조가 빌드되고 GitHub Pages에 배포된다
 - [x] **INFRA-02**: Content Collections 스키마로 템플릿 메타데이터를 타입 안전하게 관리한다
-- [ ] **INFRA-03**: 반응형 레이아웃이 모바일/태블릿/데스크톱에서 정상 동작한다
+- [x] **INFRA-03**: 반응형 레이아웃이 모바일/태블릿/데스크톱에서 정상 동작한다
 
 ### 카탈로그 UI (CATA)
 
@@ -103,7 +103,7 @@
 |-------------|-------|--------|
 | INFRA-01 | Phase 1: 프로젝트 기반 구축 | Complete |
 | INFRA-02 | Phase 1: 프로젝트 기반 구축 | Complete |
-| INFRA-03 | Phase 1: 프로젝트 기반 구축 | Pending |
+| INFRA-03 | Phase 1: 프로젝트 기반 구축 | Complete |
 | CATA-01 | Phase 2: 카탈로그 & 랜딩 UI | Pending |
 | CATA-02 | Phase 2: 카탈로그 & 랜딩 UI | Pending |
 | CATA-03 | Phase 2: 카탈로그 & 랜딩 UI | Pending |

@@ -12,7 +12,7 @@
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: 프로젝트 기반 구축** - Astro 5 + Tailwind CSS 4 프로젝트 셋업, Content Collections 스키마, 반응형 레이아웃
+- [x] **Phase 1: 프로젝트 기반 구축** - Astro 5 + Tailwind CSS 4 프로젝트 셋업, Content Collections 스키마, 반응형 레이아웃
 - [ ] **Phase 2: 카탈로그 & 랜딩 UI** - 업종별 카테고리 브라우징, 카드 레이아웃, 랜딩 페이지
 - [ ] **Phase 3: 상세 페이지 & 비즈니스 모델** - 템플릿 상세 페이지, 인터랙티브 다이어그램, 무료/프리미엄 구분, 다운로드/문의 흐름
 - [ ] **Phase 4: 콘텐츠 제작** - 업종별 워크플로우 템플릿 15-20개, 한국 서비스 API 설정 가이드
@@ -32,7 +32,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 - [x] 01-01-PLAN.md — Astro 5 + Tailwind CSS 4 프로젝트 초기화, Content Collections 스키마 + 샘플 MDX 템플릿
-- [ ] 01-02-PLAN.md — BaseLayout + Header/Footer 반응형 레이아웃, 인덱스 페이지
+- [x] 01-02-PLAN.md — BaseLayout + Header/Footer 반응형 레이아웃, 인덱스 페이지
 
 ### Phase 2: 카탈로그 & 랜딩 UI
 **Goal**: 사용자가 랜딩 페이지에서 마켓플레이스 전체를 한눈에 파악하고, 업종별 카테고리로 템플릿을 탐색할 수 있다
@@ -109,7 +109,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. 프로젝트 기반 구축 | 1/2 | In progress | - |
+| 1. 프로젝트 기반 구축 | 2/2 | Complete | 2026-03-09 |
 | 2. 카탈로그 & 랜딩 UI | 0/3 | Not started | - |
 | 3. 상세 페이지 & 비즈니스 모델 | 0/4 | Not started | - |
 | 4. 콘텐츠 제작 | 0/4 | Not started | - |
