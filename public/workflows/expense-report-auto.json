@@ -1,0 +1,202 @@
+{
+  "name": "[금융] 경비 보고서 자동화 - Webhook",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "expense-report",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "webhook-node",
+      "name": "경비 접수",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "expense-report-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 필수 필드 검증\nconst data = $input.item.json.body || $input.item.json;\n\nconst date = data.date || new Date().toISOString().slice(0, 10);\nconst item = data.item || '';\nconst amount = Number(data.amount) || 0;\nconst user = data.user || '';\nconst note = data.note || '';\n\n// 필수 필드 확인\nif (!item || !amount || !user) {\n  throw new Error('필수 필드 누락: item(항목), amount(금액), user(사용자)는 필수입니다.');\n}\n\nreturn {\n  json: {\n    date: date,\n    item: item,\n    amount: amount,\n    user: user,\n    note: note\n  }\n};"
+      },
+      "id": "code-validate-node",
+      "name": "데이터 검증",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "placeholder-spreadsheet-id",
+          "mode": "id",
+          "cachedResultName": "경비 보고서"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "id",
+          "cachedResultName": "Sheet1"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "날짜": "={{ $json.date }}",
+            "항목": "={{ $json.item }}",
+            "금액": "={{ $json.amount }}",
+            "사용자": "={{ $json.user }}",
+            "비고": "={{ $json.note }}"
+          },
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED",
+          "useAppend": true
+        }
+      },
+      "id": "sheets-node",
+      "name": "경비 기록",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [650, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "placeholder-sheets-oauth2",
+          "name": "Google Sheets OAuth2 계정"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C12345EXPENSE",
+          "mode": "id"
+        },
+        "text": "=:receipt: 경비 접수 완료\n\n*사용자:* {{ $json.user }}\n*항목:* {{ $json.item }}\n*금액:* {{ Number($json.amount).toLocaleString() }}원\n*날짜:* {{ $json.date }}\n*비고:* {{ $json.note || '없음' }}",
+        "otherOptions": {}
+      },
+      "id": "slack-node",
+      "name": "접수 확인 알림",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [850, 300],
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "placeholder-slack-oauth2",
+          "name": "Slack OAuth2 계정"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Webhook 응답 JSON 생성\nconst data = $('데이터 검증').item.json;\n\nreturn {\n  json: {\n    success: true,\n    message: `경비가 정상적으로 접수되었습니다.`,\n    data: {\n      date: data.date,\n      item: data.item,\n      amount: data.amount,\n      user: data.user\n    },\n    timestamp: new Date().toISOString()\n  }\n};"
+      },
+      "id": "code-response-node",
+      "name": "응답 생성",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1050, 300]
+    },
+    {
+      "parameters": {},
+      "id": "noop-node",
+      "name": "완료",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [1250, 300]
+    }
+  ],
+  "connections": {
+    "경비 접수": {
+      "main": [
+        [
+          {
+            "node": "데이터 검증",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "데이터 검증": {
+      "main": [
+        [
+          {
+            "node": "경비 기록",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "경비 기록": {
+      "main": [
+        [
+          {
+            "node": "접수 확인 알림",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "접수 확인 알림": {
+      "main": [
+        [
+          {
+            "node": "응답 생성",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "응답 생성": {
+      "main": [
+        [
+          {
+            "node": "완료",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "",
+    "timezone": "Asia/Seoul",
+    "saveExecutionProgress": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "executionTimeout": 3600
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2026-03-09T00:00:00.000Z",
+      "updatedAt": "2026-03-09T00:00:00.000Z",
+      "id": "finance",
+      "name": "금융"
+    },
+    {
+      "createdAt": "2026-03-09T00:00:00.000Z",
+      "updatedAt": "2026-03-09T00:00:00.000Z",
+      "id": "expense-mgmt",
+      "name": "경비 관리"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-03-09T00:00:00.000Z",
+  "versionId": "1"
+}

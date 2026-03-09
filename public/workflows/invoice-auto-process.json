@@ -1,0 +1,279 @@
+{
+  "name": "[금융] AI 인보이스 자동 처리 - 이메일 수신",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {
+          "subject": "인보이스|invoice|청구서|세금계산서"
+        },
+        "options": {}
+      },
+      "id": "gmail-trigger-node",
+      "name": "인보이스 이메일 수신",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "placeholder-gmail-oauth2",
+          "name": "Gmail OAuth2 계정"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 이메일 본문에서 인보이스 관련 정보 추출\nconst email = $input.item.json;\n\nreturn {\n  json: {\n    subject: email.subject || '',\n    from: email.from || '',\n    body: email.textPlain || email.textHtml || '',\n    date: email.date || new Date().toISOString()\n  }\n};"
+      },
+      "id": "code-extract-node",
+      "name": "이메일 본문 추출",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "resource": "text",
+        "operation": "message",
+        "modelId": "gpt-4o-mini",
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "당신은 인보이스 파싱 전문가입니다. 이메일 내용에서 인보이스 정보를 추출하여 반드시 다음 JSON 형식으로 응답하세요:\n{\"vendor\": \"업체명\", \"amount\": 금액(숫자만), \"dueDate\": \"납기일(YYYY-MM-DD)\", \"items\": \"품목 요약\"}\n\n정보를 찾을 수 없는 필드는 null로 표시하세요. 금액은 반드시 숫자만 입력하세요."
+            },
+            {
+              "role": "user",
+              "content": "=제목: {{ $json.subject }}\n발신자: {{ $json.from }}\n\n본문:\n{{ $json.body }}"
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0.2
+        }
+      },
+      "id": "openai-node",
+      "name": "AI 인보이스 파싱",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.3,
+      "position": [650, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "placeholder-openai-api",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// AI 응답 JSON 파싱 및 기본값 처리\nconst aiResponse = $input.item.json.message?.content || '{}';\nlet parsed;\n\ntry {\n  parsed = JSON.parse(aiResponse);\n} catch (e) {\n  parsed = { vendor: '파싱 실패', amount: 0, dueDate: null, items: '확인 필요' };\n}\n\nconst emailData = $('이메일 본문 추출').item.json;\n\nreturn {\n  json: {\n    date: new Date().toISOString().slice(0, 10),\n    vendor: parsed.vendor || '미확인',\n    amount: parsed.amount || 0,\n    dueDate: parsed.dueDate || '미정',\n    items: parsed.items || '확인 필요',\n    emailSubject: emailData.subject,\n    emailFrom: emailData.from\n  }\n};"
+      },
+      "id": "code-parse-node",
+      "name": "파싱 결과 정리",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "placeholder-spreadsheet-id",
+          "mode": "id",
+          "cachedResultName": "인보이스 관리"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "id",
+          "cachedResultName": "Sheet1"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "날짜": "={{ $json.date }}",
+            "업체명": "={{ $json.vendor }}",
+            "금액": "={{ $json.amount }}",
+            "납기일": "={{ $json.dueDate }}",
+            "품목": "={{ $json.items }}"
+          },
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED",
+          "useAppend": true
+        }
+      },
+      "id": "sheets-node",
+      "name": "구글 시트 기록",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [1050, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "placeholder-sheets-oauth2",
+          "name": "Google Sheets OAuth2 계정"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": ""
+          },
+          "conditions": [
+            {
+              "id": "1",
+              "leftValue": "={{ $json.amount }}",
+              "rightValue": 1000000,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-node",
+      "name": "고액 인보이스?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1250, 300]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C12345FINANCE",
+          "mode": "id"
+        },
+        "text": "=:rotating_light: 고액 인보이스 알림\n\n*업체명:* {{ $json.vendor }}\n*금액:* {{ Number($json.amount).toLocaleString() }}원\n*납기일:* {{ $json.dueDate }}\n*품목:* {{ $json.items }}\n*수신일:* {{ $json.date }}",
+        "otherOptions": {}
+      },
+      "id": "slack-node",
+      "name": "고액 알림",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [1450, 300],
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "placeholder-slack-oauth2",
+          "name": "Slack OAuth2 계정"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "인보이스 이메일 수신": {
+      "main": [
+        [
+          {
+            "node": "이메일 본문 추출",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "이메일 본문 추출": {
+      "main": [
+        [
+          {
+            "node": "AI 인보이스 파싱",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI 인보이스 파싱": {
+      "main": [
+        [
+          {
+            "node": "파싱 결과 정리",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "파싱 결과 정리": {
+      "main": [
+        [
+          {
+            "node": "구글 시트 기록",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "구글 시트 기록": {
+      "main": [
+        [
+          {
+            "node": "고액 인보이스?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "고액 인보이스?": {
+      "main": [
+        [
+          {
+            "node": "고액 알림",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "",
+    "timezone": "Asia/Seoul",
+    "saveExecutionProgress": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "executionTimeout": 3600
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2026-03-09T00:00:00.000Z",
+      "updatedAt": "2026-03-09T00:00:00.000Z",
+      "id": "finance",
+      "name": "금융"
+    },
+    {
+      "createdAt": "2026-03-09T00:00:00.000Z",
+      "updatedAt": "2026-03-09T00:00:00.000Z",
+      "id": "ai-automation",
+      "name": "AI 자동화"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-03-09T00:00:00.000Z",
+  "versionId": "1"
+}

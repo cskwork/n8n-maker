@@ -1,0 +1,45 @@
+---
+title: "AI 인보이스 자동 처리"
+description: "이메일로 수신된 인보이스를 AI가 자동으로 파싱하여 업체명, 금액, 날짜를 추출하고 Google Sheets에 정리합니다. 고액 인보이스는 Slack으로 즉시 알림을 보냅니다"
+category: "finance"
+useCase: "자동화"
+difficulty: "advanced"
+pricing: "premium"
+price: 39000
+estimatedMinutes: 30
+credentials:
+  - "Gmail OAuth"
+  - "OpenAI API Key"
+  - "Google Sheets OAuth"
+  - "Slack OAuth"
+tags:
+  - "AI"
+  - "인보이스"
+  - "금융"
+  - "자동화"
+workflowJsonPath: "/workflows/invoice-auto-process.json"
+nodeCount: 7
+publishedAt: 2026-03-09
+---
+
+## 이 워크플로우는
+
+Gmail에 인보이스 이메일이 도착하면 OpenAI GPT가 자동으로 업체명, 금액, 납기일, 품목을 추출합니다.
+추출된 정보는 Google Sheets에 자동으로 정리되며, 100만원을 초과하는 고액 인보이스는 Slack으로 즉시 알림을 보냅니다.
+
+경리/회계 담당자나 소규모 사업자가 매일 수십 통의 인보이스를 수동으로 정리하는 반복 업무를 자동화하여,
+입력 오류를 줄이고 고액 건을 놓치지 않도록 합니다.
+
+## 설정 가이드
+
+### Step 1: 크레덴셜 발급
+
+Gmail OAuth: n8n에서 Google OAuth2 크레덴셜을 설정합니다. Gmail 읽기 권한이 필요합니다. OpenAI API: platform.openai.com에서 API Key를 발급받습니다. Google Sheets OAuth: Google OAuth2 크레덴셜에 Sheets 접근 권한을 추가합니다. Slack OAuth: 워크스페이스에서 Bot Token을 발급받습니다.
+
+### Step 2: n8n 설정
+
+다운로드한 JSON 파일을 n8n의 Workflows 메뉴에서 Import합니다. Google Sheets에 인보이스 기록용 시트를 만들고 컬럼(날짜, 업체명, 금액, 납기일, 품목)을 설정합니다. 각 노드에 크레덴셜을 연결하고, 고액 기준 금액(기본 100만원)을 필요에 따라 조정합니다.
+
+### Step 3: 활성화
+
+워크플로우를 활성화하면 새 이메일이 도착할 때마다 자동으로 인보이스를 분석합니다. 처리 결과는 Google Sheets에 실시간으로 기록되며, 고액 건은 Slack으로 즉시 알림이 전송됩니다.
