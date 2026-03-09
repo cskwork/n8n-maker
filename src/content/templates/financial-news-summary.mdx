@@ -1,0 +1,43 @@
+---
+title: "금융 뉴스 AI 요약"
+description: "네이버 뉴스 API로 금융 뉴스를 자동 수집하고 OpenAI GPT가 핵심 3줄로 요약하여 Slack으로 아침 브리핑을 보냅니다"
+category: "finance"
+useCase: "요약"
+difficulty: "intermediate"
+pricing: "free"
+estimatedMinutes: 20
+credentials:
+  - "네이버 API Key"
+  - "OpenAI API Key"
+  - "Slack OAuth"
+tags:
+  - "금융"
+  - "AI"
+  - "뉴스"
+  - "한국서비스"
+workflowJsonPath: "/workflows/financial-news-summary.json"
+nodeCount: 5
+publishedAt: 2026-03-09
+---
+
+## 이 워크플로우는
+
+네이버 뉴스 검색 API를 통해 금융/경제 관련 최신 뉴스를 매일 아침 자동으로 수집합니다.
+수집된 뉴스를 OpenAI GPT가 핵심 내용 3줄로 요약하여 Slack 채널로 아침 브리핑을 전송합니다.
+
+금융업 종사자, 투자자, 또는 경제 동향을 빠르게 파악하고 싶은 직장인이
+여러 뉴스 사이트를 돌아다니지 않아도 AI가 정리한 핵심 요약을 받아볼 수 있습니다.
+
+## 설정 가이드
+
+### Step 1: 크레덴셜 발급
+
+네이버 개발자센터(developers.naver.com)에서 애플리케이션을 등록하고 Client ID와 Client Secret을 발급받습니다. OpenAI 플랫폼(platform.openai.com)에서 API Key를 발급받습니다. Slack 워크스페이스에서 OAuth 앱을 생성하고 Bot Token을 발급받습니다.
+
+### Step 2: n8n 설정
+
+다운로드한 JSON 파일을 n8n의 Workflows 메뉴에서 Import합니다. 네이버 API 크레덴셜, OpenAI API 크레덴셜, Slack OAuth 크레덴셜을 각각 연결합니다. 검색 키워드나 수집 개수를 필요에 따라 수정할 수 있습니다.
+
+### Step 3: 활성화
+
+워크플로우를 활성화하면 평일 아침 8시에 자동으로 뉴스를 수집하고 AI 요약을 생성합니다. 출근 전 Slack에서 간결한 금융 브리핑을 확인할 수 있습니다.

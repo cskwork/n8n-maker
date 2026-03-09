@@ -1,0 +1,42 @@
+---
+title: "주가 모니터링 알리미"
+description: "공공데이터포털 주식시세정보 API로 관심 종목의 전일 종가를 매일 조회하고, 목표가 도달 시 Slack으로 즉시 알림을 보냅니다"
+category: "finance"
+useCase: "모니터링"
+difficulty: "beginner"
+pricing: "free"
+estimatedMinutes: 15
+credentials:
+  - "공공데이터포털 API Key"
+  - "Slack OAuth"
+tags:
+  - "주식"
+  - "금융"
+  - "모니터링"
+  - "한국서비스"
+workflowJsonPath: "/workflows/stock-price-monitor.json"
+nodeCount: 5
+publishedAt: 2026-03-09
+---
+
+## 이 워크플로우는
+
+공공데이터포털의 금융위원회 주식시세정보 API를 활용하여 관심 종목의 전일 종가를 매일 아침 자동으로 조회합니다.
+미리 설정한 목표가에 도달하면 Slack 채널로 즉시 알림을 보내 매수/매도 타이밍을 놓치지 않도록 도와줍니다.
+
+주식 투자에 관심 있는 직장인이나 투자자가 매일 아침 증권 앱을 일일이 확인하지 않아도,
+원하는 종목이 목표 가격에 도달했을 때 자동으로 알림을 받을 수 있습니다.
+
+## 설정 가이드
+
+### Step 1: 크레덴셜 발급
+
+공공데이터포털(data.go.kr)에 회원가입 후 '금융위원회_주식시세정보' API 활용 신청을 합니다. 신청 즉시 자동 승인되며 API 키가 발급됩니다. Slack 워크스페이스에서 OAuth 앱을 생성하고 Bot Token을 발급받습니다.
+
+### Step 2: n8n 설정
+
+다운로드한 JSON 파일을 n8n의 Workflows 메뉴에서 Import합니다. '주가 조회' 노드에서 종목코드를 원하는 종목으로 변경하고, '목표가 비교' 노드에서 목표 가격을 설정합니다. 공공데이터포털 API Key와 Slack OAuth 크레덴셜을 연결합니다.
+
+### Step 3: 활성화
+
+워크플로우를 활성화하면 평일 아침 9시에 자동으로 주가를 조회합니다. 목표가에 도달한 경우에만 Slack 알림이 전송되므로 불필요한 알림 없이 중요한 시점만 포착합니다.

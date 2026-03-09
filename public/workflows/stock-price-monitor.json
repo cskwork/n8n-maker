@@ -1,0 +1,197 @@
+{
+  "name": "[금융] 주가 모니터링 알리미 - 평일 아침",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * 1-5"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger-node",
+      "name": "매일 아침 주가 체크",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService/getStockPriceInfo",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "serviceKey",
+              "value": "={{ $env.DATA_GO_KR_API_KEY }}"
+            },
+            {
+              "name": "numOfRows",
+              "value": "1"
+            },
+            {
+              "name": "pageNo",
+              "value": "1"
+            },
+            {
+              "name": "resultType",
+              "value": "json"
+            },
+            {
+              "name": "likeSrtnCd",
+              "value": "005930"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "http-request-node",
+      "name": "주가 조회",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 주가 데이터 파싱 및 목표가 비교\nconst response = $input.item.json;\nconst items = response?.response?.body?.items?.item;\n\nif (!items || items.length === 0) {\n  return { json: { reached: false, error: '데이터 없음' } };\n}\n\nconst stock = Array.isArray(items) ? items[0] : items;\nconst closingPrice = parseInt(stock.clpr, 10); // 종가\nconst stockName = stock.itmsNm || '알 수 없음'; // 종목명\nconst changeRate = stock.fltRt || '0'; // 등락률\nconst targetPrice = 80000; // TODO: 목표가를 원하는 금액으로 변경하세요\n\nreturn {\n  json: {\n    reached: closingPrice >= targetPrice,\n    stockName: stockName,\n    closingPrice: closingPrice,\n    targetPrice: targetPrice,\n    changeRate: changeRate,\n    date: stock.basDt || new Date().toISOString().slice(0, 10)\n  }\n};"
+      },
+      "id": "code-node",
+      "name": "목표가 비교",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": ""
+          },
+          "conditions": [
+            {
+              "id": "1",
+              "leftValue": "={{ $json.reached }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-node",
+      "name": "목표가 도달?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C12345STOCK",
+          "mode": "id"
+        },
+        "text": "=:chart_with_upwards_trend: 목표가 도달 알림\n\n*종목:* {{ $json.stockName }}\n*전일 종가:* {{ $json.closingPrice.toLocaleString() }}원\n*목표가:* {{ $json.targetPrice.toLocaleString() }}원\n*등락률:* {{ $json.changeRate }}%\n*기준일:* {{ $json.date }}",
+        "otherOptions": {}
+      },
+      "id": "slack-node",
+      "name": "슬랙 알림",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [1050, 300],
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "placeholder-slack-oauth2",
+          "name": "Slack OAuth2 계정"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "매일 아침 주가 체크": {
+      "main": [
+        [
+          {
+            "node": "주가 조회",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "주가 조회": {
+      "main": [
+        [
+          {
+            "node": "목표가 비교",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "목표가 비교": {
+      "main": [
+        [
+          {
+            "node": "목표가 도달?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "목표가 도달?": {
+      "main": [
+        [
+          {
+            "node": "슬랙 알림",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "",
+    "timezone": "Asia/Seoul",
+    "saveExecutionProgress": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "executionTimeout": 3600
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2026-03-09T00:00:00.000Z",
+      "updatedAt": "2026-03-09T00:00:00.000Z",
+      "id": "finance",
+      "name": "금융"
+    },
+    {
+      "createdAt": "2026-03-09T00:00:00.000Z",
+      "updatedAt": "2026-03-09T00:00:00.000Z",
+      "id": "monitoring",
+      "name": "모니터링"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-03-09T00:00:00.000Z",
+  "versionId": "1"
+}
