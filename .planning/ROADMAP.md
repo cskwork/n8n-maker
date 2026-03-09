@@ -31,7 +31,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Astro 5 + Tailwind CSS 4 프로젝트 초기화, Content Collections 스키마 + 샘플 MDX 템플릿
+- [x] 01-01-PLAN.md — Astro 5 + Tailwind CSS 4 프로젝트 초기화, Content Collections 스키마 + 샘플 MDX 템플릿
 - [ ] 01-02-PLAN.md — BaseLayout + Header/Footer 반응형 레이아웃, 인덱스 페이지
 
 ### Phase 2: 카탈로그 & 랜딩 UI
@@ -109,7 +109,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. 프로젝트 기반 구축 | 0/2 | Planning complete | - |
+| 1. 프로젝트 기반 구축 | 1/2 | In progress | - |
 | 2. 카탈로그 & 랜딩 UI | 0/3 | Not started | - |
 | 3. 상세 페이지 & 비즈니스 모델 | 0/4 | Not started | - |
 | 4. 콘텐츠 제작 | 0/4 | Not started | - |
