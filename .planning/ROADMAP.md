@@ -28,12 +28,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. `npm run build`가 에러 없이 완료되고, 빌드 결과물이 정적 HTML로 생성된다
   2. Content Collections에 샘플 템플릿 데이터를 추가하면 Zod 스키마로 빌드 시 검증된다
   3. Header/Footer가 포함된 레이아웃이 모바일(375px), 태블릿(768px), 데스크톱(1280px)에서 깨지지 않는다
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
-- [ ] 01-03: TBD
+- [ ] 01-01-PLAN.md — Astro 5 + Tailwind CSS 4 프로젝트 초기화, Content Collections 스키마 + 샘플 MDX 템플릿
+- [ ] 01-02-PLAN.md — BaseLayout + Header/Footer 반응형 레이아웃, 인덱스 페이지
 
 ### Phase 2: 카탈로그 & 랜딩 UI
 **Goal**: 사용자가 랜딩 페이지에서 마켓플레이스 전체를 한눈에 파악하고, 업종별 카테고리로 템플릿을 탐색할 수 있다
@@ -110,7 +109,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. 프로젝트 기반 구축 | 0/3 | Not started | - |
+| 1. 프로젝트 기반 구축 | 0/2 | Planning complete | - |
 | 2. 카탈로그 & 랜딩 UI | 0/3 | Not started | - |
 | 3. 상세 페이지 & 비즈니스 모델 | 0/4 | Not started | - |
 | 4. 콘텐츠 제작 | 0/4 | Not started | - |
