@@ -1,0 +1,249 @@
+{
+  "name": "[IT] Slack-Notion 할일 동기화 - Webhook",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "slack-notion-sync",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-slack-event",
+      "name": "Slack 이벤트 수신",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "slack-notion-sync-webhook"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const body = $input.first().json.body || $input.first().json;\n\n// Slack URL verification (challenge)\nif (body.type === 'url_verification') {\n  return [{ json: { challenge: body.challenge, isChallenge: true } }];\n}\n\nconst event = body.event || {};\nconst isReactionAdded = event.type === 'reaction_added';\nconst isMemoEmoji = event.reaction === 'memo';\n\nreturn [{\n  json: {\n    isChallenge: false,\n    isMemoReaction: isReactionAdded && isMemoEmoji,\n    channel: event.item?.channel || '',\n    messageTs: event.item?.ts || '',\n    user: event.user || '',\n    reaction: event.reaction || ''\n  }\n}];"
+      },
+      "id": "code-parse-event",
+      "name": "이벤트 파싱",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": ""
+          },
+          "conditions": [
+            {
+              "id": "1",
+              "leftValue": "={{ $json.isMemoReaction }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-memo-emoji",
+      "name": "할일 이모지?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://slack.com/api/conversations.history",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SLACK_BOT_TOKEN }}"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "channel",
+              "value": "={{ $json.channel }}"
+            },
+            {
+              "name": "latest",
+              "value": "={{ $json.messageTs }}"
+            },
+            {
+              "name": "inclusive",
+              "value": "true"
+            },
+            {
+              "name": "limit",
+              "value": "1"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "http-get-message",
+      "name": "메시지 내용 조회",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [850, 200]
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "operation": "create",
+        "databaseId": {
+          "__rl": true,
+          "value": "placeholder-notion-db-id",
+          "mode": "id"
+        },
+        "title": "={{ $json.messages?.[0]?.text || '새 할일' }}",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "담당자",
+              "richTextValue": "={{ $('이벤트 파싱').item.json.user }}"
+            },
+            {
+              "key": "상태",
+              "selectValue": "To Do"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "notion-create-task",
+      "name": "노션 할일 추가",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [1050, 200],
+      "credentials": {
+        "notionApi": {
+          "id": "placeholder-notion-api",
+          "name": "Notion API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $('이벤트 파싱').item.json.channel }}",
+          "mode": "id"
+        },
+        "text": "=:white_check_mark: 노션에 할일이 추가되었습니다!",
+        "otherOptions": {
+          "thread_ts": "={{ $('이벤트 파싱').item.json.messageTs }}"
+        }
+      },
+      "id": "slack-confirm",
+      "name": "확인 알림",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [1250, 200],
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "placeholder-slack-oauth2",
+          "name": "Slack OAuth2 계정"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Slack 이벤트 수신": {
+      "main": [
+        [
+          {
+            "node": "이벤트 파싱",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "이벤트 파싱": {
+      "main": [
+        [
+          {
+            "node": "할일 이모지?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "할일 이모지?": {
+      "main": [
+        [
+          {
+            "node": "메시지 내용 조회",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "메시지 내용 조회": {
+      "main": [
+        [
+          {
+            "node": "노션 할일 추가",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "노션 할일 추가": {
+      "main": [
+        [
+          {
+            "node": "확인 알림",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "",
+    "timezone": "Asia/Seoul",
+    "saveExecutionProgress": true,
+    "executionTimeout": 3600,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2026-03-09T00:00:00.000Z",
+      "updatedAt": "2026-03-09T00:00:00.000Z",
+      "id": "productivity",
+      "name": "생산성"
+    },
+    {
+      "createdAt": "2026-03-09T00:00:00.000Z",
+      "updatedAt": "2026-03-09T00:00:00.000Z",
+      "id": "task-sync",
+      "name": "할일 동기화"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-03-09T00:00:00.000Z",
+  "versionId": "1"
+}

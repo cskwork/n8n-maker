@@ -1,0 +1,226 @@
+{
+  "name": "[HR] 온보딩 자동화 - Webhook",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "onboarding",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "webhook-onboarding",
+      "name": "신규 입사자 등록",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "onboarding-webhook"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "=[환영] {{ $json.name }}님, 입사를 축하합니다!",
+        "message": "=안녕하세요, {{ $json.name }}님!\n\n{{ $json.department }}에 오신 것을 진심으로 환영합니다.\n\n입사일: {{ $json.startDate }}\n부서: {{ $json.department }}\n\n입사 전 준비사항과 첫날 안내는 별도로 전달드리겠습니다.\n궁금한 점이 있으시면 언제든 HR팀에 문의해주세요.\n\n감사합니다.\nHR팀 드림",
+        "options": {}
+      },
+      "id": "gmail-welcome",
+      "name": "환영 이메일",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [450, 300],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "placeholder-gmail-oauth2",
+          "name": "Gmail OAuth2 계정"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C_TEAM_CHANNEL_ID",
+          "mode": "id"
+        },
+        "text": "=:tada: *신규 입사자를 소개합니다!*\n\n*이름:* {{ $('신규 입사자 등록').item.json.name }}\n*부서:* {{ $('신규 입사자 등록').item.json.department }}\n*입사일:* {{ $('신규 입사자 등록').item.json.startDate }}\n\n따뜻하게 맞이해주세요!",
+        "otherOptions": {}
+      },
+      "id": "slack-team-notify",
+      "name": "팀 채널 안내",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [650, 300],
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "placeholder-slack-oauth2",
+          "name": "Slack OAuth2 계정"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "placeholder-spreadsheet-id",
+          "mode": "id",
+          "cachedResultName": "온보딩 체크리스트"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "id",
+          "cachedResultName": "Sheet1"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "이름": "={{ $('신규 입사자 등록').item.json.name }}",
+            "부서": "={{ $('신규 입사자 등록').item.json.department }}",
+            "입사일": "={{ $('신규 입사자 등록').item.json.startDate }}",
+            "계정생성": "미완료",
+            "장비지급": "미완료",
+            "교육일정": "미배정"
+          },
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED",
+          "useAppend": true
+        }
+      },
+      "id": "sheets-checklist",
+      "name": "체크리스트 생성",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [850, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "placeholder-sheets-oauth2",
+          "name": "Google Sheets OAuth2 계정"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C_HR_CHANNEL_ID",
+          "mode": "id"
+        },
+        "text": "=:white_check_mark: *온보딩 프로세스 시작*\n\n{{ $('신규 입사자 등록').item.json.name }}님의 온보딩이 시작되었습니다.\n\n- 환영 이메일 발송 완료\n- 팀 채널 공지 완료\n- 체크리스트 생성 완료\n\n계정 생성, 장비 지급, 교육 일정 배정을 진행해주세요.",
+        "otherOptions": {}
+      },
+      "id": "slack-hr-notify",
+      "name": "HR 완료 알림",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [1050, 300],
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "placeholder-slack-oauth2",
+          "name": "Slack OAuth2 계정"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "noop-complete",
+      "name": "완료",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [1250, 300]
+    }
+  ],
+  "connections": {
+    "신규 입사자 등록": {
+      "main": [
+        [
+          {
+            "node": "환영 이메일",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "환영 이메일": {
+      "main": [
+        [
+          {
+            "node": "팀 채널 안내",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "팀 채널 안내": {
+      "main": [
+        [
+          {
+            "node": "체크리스트 생성",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "체크리스트 생성": {
+      "main": [
+        [
+          {
+            "node": "HR 완료 알림",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HR 완료 알림": {
+      "main": [
+        [
+          {
+            "node": "완료",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "",
+    "timezone": "Asia/Seoul",
+    "saveExecutionProgress": true,
+    "executionTimeout": 3600,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2026-03-09T00:00:00.000Z",
+      "updatedAt": "2026-03-09T00:00:00.000Z",
+      "id": "hr-automation",
+      "name": "HR 자동화"
+    },
+    {
+      "createdAt": "2026-03-09T00:00:00.000Z",
+      "updatedAt": "2026-03-09T00:00:00.000Z",
+      "id": "onboarding",
+      "name": "온보딩"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-03-09T00:00:00.000Z",
+  "versionId": "1"
+}

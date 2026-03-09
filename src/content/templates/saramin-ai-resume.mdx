@@ -1,0 +1,70 @@
+---
+title: "사람인 AI 자기소개서 생성"
+description: "사람인 API로 채용공고 자격 요건을 가져와 OpenAI가 맞춤형 자기소개서 초안을 생성하고 Google Sheets에 저장합니다"
+category: "hr"
+useCase: "생성"
+difficulty: "advanced"
+pricing: "premium"
+price: 39000
+estimatedMinutes: 30
+credentials:
+  - "사람인 API Key"
+  - "OpenAI API Key"
+  - "Google Sheets OAuth"
+tags:
+  - "사람인"
+  - "AI"
+  - "한국서비스"
+  - "자기소개서"
+  - "채용"
+workflowJsonPath: "/workflows/saramin-ai-resume.json"
+nodeCount: 7
+publishedAt: 2026-03-09
+---
+
+## 이 워크플로우는
+
+사람인 API로 관심 채용공고의 자격 요건을 자동으로 가져오고,
+OpenAI GPT가 해당 공고에 맞춤화된 자기소개서 초안을 생성합니다.
+결과는 Google Sheets에 자동 저장되어, 여러 공고의 자소서를 체계적으로 관리할 수 있습니다.
+
+취업 준비생의 자기소개서 작성 시간을 대폭 단축하고, AI의 도움으로 더 체계적인 자소서를 만들 수 있습니다.
+
+## 주요 기능
+
+- **사람인 채용공고 검색**: 키워드로 최신 채용공고 자동 검색
+- **자격 요건 추출**: 상위 공고의 회사명, 직무, 요구 사항 정리
+- **AI 자소서 생성**: GPT가 지원동기, 직무역량, 성장가능성 항목으로 구성
+- **Google Sheets 저장**: 날짜, 회사명, 직무, 자기소개서를 스프레드시트에 기록
+
+## 설정 가이드
+
+### Step 1: 사람인 API 키 발급
+
+1. [사람인 오픈 API](https://oapi.saramin.co.kr)에 접속합니다
+2. **이용 신청**을 클릭하고 필요한 정보를 입력합니다
+3. 신청 승인 후 **access-key**를 확인합니다
+4. 별도로 [OpenAI API 키](https://platform.openai.com)도 발급합니다
+
+### Step 2: n8n 설정
+
+1. JSON 파일을 n8n에 import합니다
+2. n8n 환경변수에 `SARAMIN_API_KEY`를 설정합니다
+3. OpenAI API 인증을 설정합니다
+4. Google Sheets OAuth 인증을 연결하고, 결과를 저장할 스프레드시트를 생성합니다
+   - 컬럼: 날짜 / 회사명 / 직무 / 자기소개서
+
+### Step 3: 테스트 및 실행
+
+1. Webhook URL로 테스트 요청을 보냅니다:
+   ```json
+   { "keyword": "프론트엔드 개발자", "count": 3 }
+   ```
+2. 사람인 검색 결과와 생성된 자기소개서를 확인합니다
+3. Google Sheets에 결과가 저장되었는지 확인합니다
+
+### 참고사항
+
+- 사람인 API 일일 **500회** 호출 제한이 있습니다
+- 대량 검색 시 배치 처리를 권장합니다
+- AI가 생성한 자소서는 초안이므로, 반드시 본인의 경험과 내용으로 수정하세요
