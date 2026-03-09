@@ -1,0 +1,193 @@
+{
+  "name": "DART 전자공시 모니터링",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9,12,15,18 * * 1-5"
+            }
+          ]
+        }
+      },
+      "id": "dart-schedule-trigger",
+      "name": "평일 업무시간 체크",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://opendart.fss.or.kr/api/list.json",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "crtfc_key",
+              "value": "={{ $env.DART_API_KEY }}"
+            },
+            {
+              "name": "corp_code",
+              "value": "00126380"
+            },
+            {
+              "name": "bgn_de",
+              "value": "={{ $now.toFormat('yyyyMMdd') }}"
+            },
+            {
+              "name": "page_count",
+              "value": "10"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "dart-api-call",
+      "name": "DART API 공시 조회",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const response = $input.item.json;\nconst disclosures = response.list || [];\n\nif (disclosures.length === 0) {\n  return [{ json: { hasNew: false, count: 0 } }];\n}\n\nreturn disclosures.map(d => ({\n  json: {\n    hasNew: true,\n    corpName: d.corp_name || '',\n    reportName: d.report_nm || '',\n    receivedDate: d.rcept_dt || '',\n    reportNo: d.rcept_no || '',\n    url: `https://dart.fss.or.kr/dsaf001/main.do?rcpNo=${d.rcept_no}`\n  }\n}));"
+      },
+      "id": "dart-parse-node",
+      "name": "공시 데이터 파싱",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": ""
+          },
+          "conditions": [
+            {
+              "id": "1",
+              "leftValue": "={{ $json.hasNew }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "dart-if-node",
+      "name": "신규 공시 확인",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst count = items.length;\n\nconst list = items.slice(0, 5).map((item, i) => {\n  const d = item.json;\n  return `${i + 1}. *${d.reportName}*\\n   회사: ${d.corpName} | 접수일: ${d.receivedDate}\\n   링크: ${d.url}`;\n}).join('\\n\\n');\n\nconst message = `공시 알림: ${count}건의 새로운 공시\\n\\n${list}${count > 5 ? `\\n\\n...외 ${count - 5}건` : ''}`;\n\nreturn [{ json: { message, count } }];"
+      },
+      "id": "dart-message-node",
+      "name": "알림 메시지 생성",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1050, 200]
+    },
+    {
+      "parameters": {
+        "channel": "#finance-alerts",
+        "text": "={{ $json.message }}",
+        "otherOptions": {}
+      },
+      "id": "dart-slack-node",
+      "name": "Slack 공시 알림",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [1250, 200],
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "placeholder-slack-credential",
+          "name": "Slack 계정"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "평일 업무시간 체크": {
+      "main": [
+        [
+          {
+            "node": "DART API 공시 조회",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DART API 공시 조회": {
+      "main": [
+        [
+          {
+            "node": "공시 데이터 파싱",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "공시 데이터 파싱": {
+      "main": [
+        [
+          {
+            "node": "신규 공시 확인",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "신규 공시 확인": {
+      "main": [
+        [
+          {
+            "node": "알림 메시지 생성",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "알림 메시지 생성": {
+      "main": [
+        [
+          {
+            "node": "Slack 공시 알림",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "",
+    "timezone": "Asia/Seoul",
+    "saveExecutionProgress": true,
+    "saveDataSuccessExecution": "all",
+    "saveDataErrorExecution": "all"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-03-09T00:00:00.000Z",
+  "versionId": "1"
+}

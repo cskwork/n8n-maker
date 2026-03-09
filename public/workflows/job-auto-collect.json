@@ -1,0 +1,244 @@
+{
+  "name": "채용공고 자동 수집",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 10 * * 1-5"
+            }
+          ]
+        }
+      },
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "name": "매일 오전 10시 실행",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://oapi.saramin.co.kr/job-search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "queryAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "access-key",
+              "value": "={{ $env.SARAMIN_API_KEY }}"
+            },
+            {
+              "name": "keywords",
+              "value": "개발자"
+            },
+            {
+              "name": "count",
+              "value": "20"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+      "name": "사람인 API 호출",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        450,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const response = $input.item.json;\nconst jobs = response.jobs?.job || [];\n\nconst extractedJobs = jobs.map(job => ({\n  title: job.position?.title || '',\n  company: job.company?.detail?.name || '',\n  location: job.position?.location?.name || '',\n  salary: job.salary?.name || '회사내규에 따름',\n  deadline: job.expiration_date || '',\n  url: job.url || '',\n  timestamp: new Date().toISOString()\n}));\n\nreturn extractedJobs.map(job => ({ json: job }));"
+      },
+      "id": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+      "name": "채용공고 데이터 추출",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        650,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 이미 수집된 URL 목록 (실제로는 DB나 파일에서 로드)\nconst seenUrls = new Set(\n  $('Google Sheets').all().map(item => item.json.url)\n);\n\nconst newJobs = [];\n\nfor (const item of $input.all()) {\n  const job = item.json;\n  if (!seenUrls.has(job.url)) {\n    newJobs.push(item);\n    seenUrls.add(job.url);\n  }\n}\n\nreturn newJobs;"
+      },
+      "id": "d4e5f6a7-b8c9-0123-def1-234567890123",
+      "name": "신규 공고 필터링",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        850,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $env.GOOGLE_SHEET_ID }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "채용공고",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "제목": "={{ $json.title }}",
+            "회사명": "={{ $json.company }}",
+            "근무지": "={{ $json.location }}",
+            "급여": "={{ $json.salary }}",
+            "마감일": "={{ $json.deadline }}",
+            "URL": "={{ $json.url }}",
+            "수집일시": "={{ $json.timestamp }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "e5f6a7b8-c9d0-1234-ef12-345678901234",
+      "name": "Google Sheets에 저장",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1050,
+        300
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "placeholder-google-sheets-credential",
+          "name": "Google Sheets 계정"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const jobs = $input.all();\nconst count = jobs.length;\n\nif (count === 0) {\n  return [{ json: { hasNewJobs: false } }];\n}\n\nconst top3 = jobs.slice(0, 3).map((item, index) => {\n  const job = item.json;\n  return `${index + 1}. *${job.title}* - ${job.company}\\n   📍 ${job.location} | 💰 ${job.salary}\\n   🔗 ${job.url}`;\n}).join('\\n\\n');\n\nconst message = `🎯 *신규 채용공고 ${count}건 발견!*\\n\\n${top3}${count > 3 ? `\\n\\n...외 ${count - 3}건` : ''}`;\n\nreturn [{ json: { hasNewJobs: true, count, message } }];"
+      },
+      "id": "f6a7b8c9-d0e1-2345-f123-456789012345",
+      "name": "알림 메시지 생성",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "channel": "#job-alerts",
+        "text": "={{ $json.message }}",
+        "otherOptions": {}
+      },
+      "id": "a7b8c9d0-e1f2-3456-1234-567890123456",
+      "name": "Slack 알림 발송",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [
+        1450,
+        300
+      ],
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "placeholder-slack-credential",
+          "name": "Slack 계정"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "매일 오전 10시 실행": {
+      "main": [
+        [
+          {
+            "node": "사람인 API 호출",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "사람인 API 호출": {
+      "main": [
+        [
+          {
+            "node": "채용공고 데이터 추출",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "채용공고 데이터 추출": {
+      "main": [
+        [
+          {
+            "node": "신규 공고 필터링",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "신규 공고 필터링": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets에 저장",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets에 저장": {
+      "main": [
+        [
+          {
+            "node": "알림 메시지 생성",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "알림 메시지 생성": {
+      "main": [
+        [
+          {
+            "node": "Slack 알림 발송",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "",
+    "timezone": "Asia/Seoul",
+    "saveExecutionProgress": true,
+    "saveDataSuccessExecution": "all",
+    "saveDataErrorExecution": "all"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-02-14T00:00:00.000Z",
+  "versionId": "1"
+}

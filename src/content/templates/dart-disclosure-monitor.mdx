@@ -1,0 +1,27 @@
+---
+title: "DART 전자공시 모니터링"
+description: "관심 기업의 DART 전자공시를 실시간 모니터링하여 새로운 공시가 등록되면 즉시 알림을 보냅니다"
+category: "finance"
+useCase: "모니터링"
+difficulty: "intermediate"
+pricing: "premium"
+estimatedMinutes: 25
+credentials:
+  - "DART API Key"
+  - "Slack OAuth"
+tags:
+  - "DART"
+  - "공시"
+  - "한국서비스"
+  - "금융"
+workflowJsonPath: "/workflows/dart-disclosure-monitor.json"
+nodeCount: 6
+publishedAt: 2026-03-09
+---
+
+## 이 워크플로우는
+
+금융감독원 DART 전자공시 API를 활용하여 관심 기업의 공시 정보를 주기적으로 확인합니다.
+새로운 공시가 등록되면 Slack 채널로 즉시 알림을 보내 투자 판단에 필요한 정보를 빠르게 파악할 수 있습니다.
+
+증권사 리포트보다 빠르게 원본 공시 정보를 확인할 수 있어, 투자자와 금융 업무 담당자에게 유용합니다.

@@ -1,0 +1,28 @@
+---
+title: "AI 이메일 자동 분류기"
+description: "OpenAI GPT를 활용하여 수신 이메일을 자동으로 분류하고 긴급 메일은 Slack으로 즉시 알림을 보냅니다"
+category: "it"
+useCase: "분류"
+difficulty: "intermediate"
+pricing: "free"
+estimatedMinutes: 20
+credentials:
+  - "Gmail OAuth"
+  - "OpenAI API Key"
+  - "Slack OAuth"
+  - "Google Sheets OAuth"
+tags:
+  - "AI"
+  - "이메일"
+  - "GPT"
+workflowJsonPath: "/workflows/ai-email-classifier.json"
+nodeCount: 7
+publishedAt: 2026-03-09
+---
+
+## 이 워크플로우는
+
+Gmail에 새 이메일이 도착하면 OpenAI GPT가 자동으로 긴급/일반/홍보/스팸으로 분류합니다.
+긴급 이메일은 Slack으로 즉시 알림을 보내고, 모든 분류 결과는 Google Sheets에 기록됩니다.
+
+하루에 수십 통의 이메일을 받는 직장인이 중요한 메일을 놓치지 않고 효율적으로 관리할 수 있습니다.
