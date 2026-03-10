@@ -44,6 +44,22 @@ const relatedTemplates = allTemplates
   .filter((t) => t.data.category === category && t.id !== template.id)
   .slice(0, 3);
 
+// SoftwareApplication JSON-LD 구조화 데이터
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": title,
+  "description": description,
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "inLanguage": "ko",
+  "offers": {
+    "@type": "Offer",
+    "price": pricing === 'free' ? 0 : (price || 19000),
+    "priceCurrency": "KRW",
+  },
+};
+
 // 배지 스타일
 const pricingClass = pricing === 'free'
   ? 'bg-green-50 text-green-700'
@@ -54,6 +70,8 @@ const pricingText = pricing === 'free' ? '무료' : '프리미엄';
 <BaseLayout
   title={title}
   description={description}
+  ogType="article"
+  jsonLd={jsonLd}
   breadcrumbs={[
     { label: categoryLabel[category] || category, href: `/n8n-marketplace/category/${category}` },
     { label: title, href: '' },
