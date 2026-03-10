@@ -37,7 +37,7 @@
 
 - [x] **SEO-01**: 각 페이지에 적절한 메타 태그(title, description, OG)가 설정된다
 - [x] **SEO-02**: sitemap.xml과 robots.txt가 자동 생성된다
-- [ ] **SEO-03**: 업종별 키워드 랜딩 페이지가 존재한다 ("금융 자동화", "채용공고 자동 수집" 등)
+- [x] **SEO-03**: 업종별 키워드 랜딩 페이지가 존재한다 ("금융 자동화", "채용공고 자동 수집" 등)
 
 ### 콘텐츠 (CONT)
 
@@ -128,7 +128,7 @@
 | CONT-06 | Phase 4: 콘텐츠 제작 | Complete |
 | SEO-01 | Phase 5: SEO & 런칭 | Complete |
 | SEO-02 | Phase 5: SEO & 런칭 | Complete |
-| SEO-03 | Phase 5: SEO & 런칭 | Pending |
+| SEO-03 | Phase 5: SEO & 런칭 | Complete |
 
 **Coverage:**
 - v1 requirements: 28 total

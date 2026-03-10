@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: 카탈로그 & 랜딩 UI** - 업종별 카테고리 브라우징, 카드 레이아웃, 랜딩 페이지 (completed 2026-03-09)
 - [x] **Phase 3: 상세 페이지 & 비즈니스 모델** - 템플릿 상세 페이지, 인터랙티브 다이어그램, 무료/프리미엄 구분, 다운로드/문의 흐름 (completed 2026-03-09)
 - [x] **Phase 4: 콘텐츠 제작** - 업종별 워크플로우 템플릿 15-20개, 한국 서비스 API 설정 가이드 (completed 2026-03-09)
-- [ ] **Phase 5: SEO & 런칭** - 메타 태그, sitemap, 키워드 랜딩 페이지, GitHub Pages 배포
+- [x] **Phase 5: SEO & 런칭** - 메타 태그, sitemap, 키워드 랜딩 페이지, GitHub Pages 배포 (completed 2026-03-11)
 
 ## Phase Details
 
@@ -96,8 +96,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — SEO 기반 인프라 (BaseLayout OG 확장, @astrojs/sitemap, robots.txt, OG 이미지, JSON-LD, deploy.yml 업데이트)
-- [ ] 05-02-PLAN.md — 업종별 키워드 랜딩 페이지 4개 + 기존 페이지 SEO 메타 보강 + 최종 검증
+- [x] 05-01-PLAN.md — SEO 기반 인프라 (BaseLayout OG 확장, @astrojs/sitemap, robots.txt, OG 이미지, JSON-LD, deploy.yml 업데이트)
+- [x] 05-02-PLAN.md — 업종별 키워드 랜딩 페이지 4개 + 기존 페이지 SEO 메타 보강 + 최종 검증
 
 ## Progress
 
@@ -110,4 +110,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 2. 카탈로그 & 랜딩 UI | 2/2 | Complete   | 2026-03-09 |
 | 3. 상세 페이지 & 비즈니스 모델 | 3/3 | Complete   | 2026-03-09 |
 | 4. 콘텐츠 제작 | 4/4 | Complete | 2026-03-09 |
-| 5. SEO & 런칭 | 0/2 | Not started | - |
+| 5. SEO & 런칭 | 2/2 | Complete | 2026-03-11 |
