@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cskwork.github.io/n8n-marketplace/sitemap-index.xml
