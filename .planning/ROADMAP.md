@@ -93,12 +93,11 @@ Plans:
   2. sitemap.xml과 robots.txt가 빌드 시 자동 생성된다
   3. "금융 자동화", "채용공고 자동 수집" 등 업종별 키워드 랜딩 페이지가 존재하고 접근 가능하다
   4. GitHub Pages에 프로덕션 빌드가 배포되어 공개 URL로 접근 가능하다
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 05-01: TBD
-- [ ] 05-02: TBD
-- [ ] 05-03: TBD
+- [ ] 05-01-PLAN.md — SEO 기반 인프라 (BaseLayout OG 확장, @astrojs/sitemap, robots.txt, OG 이미지, JSON-LD, deploy.yml 업데이트)
+- [ ] 05-02-PLAN.md — 업종별 키워드 랜딩 페이지 4개 + 기존 페이지 SEO 메타 보강 + 최종 검증
 
 ## Progress
 
@@ -111,4 +110,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 2. 카탈로그 & 랜딩 UI | 2/2 | Complete   | 2026-03-09 |
 | 3. 상세 페이지 & 비즈니스 모델 | 3/3 | Complete   | 2026-03-09 |
 | 4. 콘텐츠 제작 | 4/4 | Complete | 2026-03-09 |
-| 5. SEO & 런칭 | 0/3 | Not started | - |
+| 5. SEO & 런칭 | 0/2 | Not started | - |
