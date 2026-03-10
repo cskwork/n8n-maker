@@ -1,0 +1,208 @@
+---
+/**
+ * /solutions/marketing - 마케팅 자동화 키워드 랜딩 페이지
+ * 문제-해결형 구성: 고민 -> 해결 -> 관련 템플릿 -> CTA
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TemplateCard from '../../components/catalog/TemplateCard.astro';
+import { getCollection } from 'astro:content';
+
+const allTemplates = await getCollection('templates');
+const marketingTemplates = allTemplates.filter((t) => t.data.category === 'marketing');
+
+const painPoints = [
+  {
+    title: 'SNS 수동 포스팅',
+    description: '여러 채널에 같은 콘텐츠를 일일이 올리느라 시간이 낭비됩니다.',
+    icon: 'share',
+  },
+  {
+    title: '경쟁사 동향 파악 어려움',
+    description: '경쟁사의 뉴스와 활동을 매번 검색하고 정리하는 데 많은 시간이 걸립니다.',
+    icon: 'search',
+  },
+  {
+    title: '콘텐츠 제작 반복',
+    description: '블로그, 뉴스레터 등 콘텐츠를 매번 처음부터 작성해야 해 부담이 큽니다.',
+    icon: 'edit',
+  },
+  {
+    title: '고객 알림 수동 발송',
+    description: '이벤트, 프로모션 알림을 카카오톡이나 이메일로 하나씩 보내야 합니다.',
+    icon: 'mail',
+  },
+];
+
+const solutions = [
+  {
+    title: 'SNS 크로스 포스팅',
+    description: '한 번의 작성으로 여러 SNS 채널에 동시에 자동 포스팅됩니다.',
+    icon: 'broadcast',
+  },
+  {
+    title: 'AI 경쟁사 분석',
+    description: '경쟁사 뉴스를 자동 수집하고 AI가 핵심 내용을 요약하여 리포트를 생성합니다.',
+    icon: 'analytics',
+  },
+  {
+    title: '콘텐츠 파이프라인',
+    description: 'AI가 초안을 작성하고, 리뷰 후 자동으로 발행되는 콘텐츠 파이프라인을 구축합니다.',
+    icon: 'pipeline',
+  },
+  {
+    title: '카카오톡 자동 알림',
+    description: '이벤트, 할인 정보를 카카오톡으로 자동 발송하여 고객 참여를 높입니다.',
+    icon: 'notification',
+  },
+];
+---
+
+<BaseLayout
+  title="마케팅 자동화 - n8n으로 마케팅 업무 자동화하기"
+  description="SNS 자동 포스팅, 경쟁사 모니터링, 콘텐츠 파이프라인 등 마케팅 업무를 n8n으로 자동화하세요"
+  ogType="website"
+  breadcrumbs={[
+    { label: '마케팅 자동화', href: '/n8n-marketplace/solutions/marketing' },
+  ]}
+>
+  <!-- 히어로 섹션 -->
+  <section class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-3xl md:text-5xl font-bold text-surface-900 mb-4">
+        매일 수작업으로 마케팅 업무 하느라<br class="hidden md:block" /> 힘드셨나요?
+      </h1>
+      <p class="text-lg text-surface-600 mb-8 max-w-2xl mx-auto">
+        n8n 워크플로우 템플릿으로 SNS 포스팅부터 고객 알림까지,<br class="hidden md:block" />
+        반복되는 마케팅 업무를 자동화하세요.
+      </p>
+    </div>
+  </section>
+
+  <!-- 고민 섹션 -->
+  <section class="py-16 bg-surface-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-bold text-surface-900 mb-10 text-center">
+        이런 고민, 하고 계시지 않나요?
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {painPoints.map((point) => (
+          <div class="flex items-start gap-4 p-6 bg-white rounded-xl border border-surface-200">
+            <div class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center shrink-0">
+              {point.icon === 'share' && (
+                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                </svg>
+              )}
+              {point.icon === 'search' && (
+                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              )}
+              {point.icon === 'edit' && (
+                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+              )}
+              {point.icon === 'mail' && (
+                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              )}
+            </div>
+            <div>
+              <h3 class="font-bold text-surface-900 mb-1">{point.title}</h3>
+              <p class="text-sm text-surface-500">{point.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 해결 섹션 -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-bold text-surface-900 mb-10 text-center">
+        n8n으로 이렇게 해결합니다
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {solutions.map((sol) => (
+          <div class="flex items-start gap-4 p-6 bg-white rounded-xl border border-primary-200">
+            <div class="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center shrink-0">
+              {sol.icon === 'broadcast' && (
+                <svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                </svg>
+              )}
+              {sol.icon === 'analytics' && (
+                <svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+              )}
+              {sol.icon === 'pipeline' && (
+                <svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+                </svg>
+              )}
+              {sol.icon === 'notification' && (
+                <svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+              )}
+            </div>
+            <div>
+              <h3 class="font-bold text-surface-900 mb-1">{sol.title}</h3>
+              <p class="text-sm text-surface-500">{sol.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 관련 템플릿 목록 -->
+  {marketingTemplates.length > 0 && (
+    <section class="py-16 bg-surface-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl md:text-3xl font-bold text-surface-900 mb-10 text-center">
+          마케팅 자동화 템플릿
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {marketingTemplates.map((template) => (
+            <TemplateCard
+              title={template.data.title}
+              description={template.data.description}
+              category={template.data.category}
+              difficulty={template.data.difficulty}
+              pricing={template.data.pricing}
+              nodeCount={template.data.nodeCount}
+              estimatedMinutes={template.data.estimatedMinutes}
+              slug={template.id}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- CTA 섹션 -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-2xl md:text-3xl font-bold text-surface-900 mb-4">
+        마케팅 업무 자동화를 시작하세요
+      </h2>
+      <p class="text-surface-600 mb-8 max-w-xl mx-auto">
+        더 많은 마케팅 자동화 템플릿을 확인하고, 바로 다운로드하세요.
+      </p>
+      <a
+        href="/n8n-marketplace/category/marketing"
+        class="inline-flex items-center px-6 py-3 bg-primary-500 text-white font-semibold rounded-lg hover:bg-primary-600 transition-colors text-lg"
+      >
+        템플릿 보러가기
+        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </a>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,208 @@
+---
+/**
+ * /solutions/finance - 금융 자동화 키워드 랜딩 페이지
+ * 문제-해결형 구성: 고민 -> 해결 -> 관련 템플릿 -> CTA
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TemplateCard from '../../components/catalog/TemplateCard.astro';
+import { getCollection } from 'astro:content';
+
+const allTemplates = await getCollection('templates');
+const financeTemplates = allTemplates.filter((t) => t.data.category === 'finance');
+
+const painPoints = [
+  {
+    title: '매일 수동 주가 확인',
+    description: '여러 종목의 주가를 매번 직접 검색하고, 변동 사항을 놓치는 경우가 잦습니다.',
+    icon: 'chart',
+  },
+  {
+    title: 'DART 공시 놓침',
+    description: '중요한 기업 공시가 올라와도 제때 확인하지 못해 투자 타이밍을 놓칩니다.',
+    icon: 'alert',
+  },
+  {
+    title: '인보이스 수작업 처리',
+    description: '이메일로 받은 인보이스를 일일이 열어 금액과 항목을 수동으로 정리합니다.',
+    icon: 'document',
+  },
+  {
+    title: '경비 정산 지연',
+    description: '경비 영수증을 모아서 보고서를 만드는 데 시간이 오래 걸려 정산이 밀립니다.',
+    icon: 'clock',
+  },
+];
+
+const solutions = [
+  {
+    title: '주가 자동 모니터링',
+    description: '설정한 종목의 주가를 자동으로 확인하고, 목표가 도달 시 즉시 알림을 보냅니다.',
+    icon: 'monitor',
+  },
+  {
+    title: 'DART 공시 자동 알림',
+    description: '관심 기업의 전자공시가 등록되면 실시간으로 Slack이나 이메일로 알려줍니다.',
+    icon: 'bell',
+  },
+  {
+    title: 'AI 인보이스 처리',
+    description: 'AI가 인보이스 내용을 자동으로 파싱하여 금액, 항목, 날짜를 정리해 줍니다.',
+    icon: 'ai',
+  },
+  {
+    title: '경비 보고서 자동화',
+    description: '영수증 데이터를 자동으로 수집하고 경비 보고서를 생성하여 제출합니다.',
+    icon: 'report',
+  },
+];
+---
+
+<BaseLayout
+  title="금융 자동화 - n8n으로 금융 업무 자동화하기"
+  description="주가 모니터링, DART 공시 알림, 인보이스 처리 등 금융 업무를 n8n 워크플로우로 자동화하세요"
+  ogType="website"
+  breadcrumbs={[
+    { label: '금융 자동화', href: '/n8n-marketplace/solutions/finance' },
+  ]}
+>
+  <!-- 히어로 섹션 -->
+  <section class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-3xl md:text-5xl font-bold text-surface-900 mb-4">
+        매일 수작업으로 금융 업무 하느라<br class="hidden md:block" /> 힘드셨나요?
+      </h1>
+      <p class="text-lg text-surface-600 mb-8 max-w-2xl mx-auto">
+        n8n 워크플로우 템플릿으로 주가 모니터링부터 경비 정산까지,<br class="hidden md:block" />
+        반복되는 금융 업무를 자동화하세요.
+      </p>
+    </div>
+  </section>
+
+  <!-- 고민 섹션 -->
+  <section class="py-16 bg-surface-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-bold text-surface-900 mb-10 text-center">
+        이런 고민, 하고 계시지 않나요?
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {painPoints.map((point) => (
+          <div class="flex items-start gap-4 p-6 bg-white rounded-xl border border-surface-200">
+            <div class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center shrink-0">
+              {point.icon === 'chart' && (
+                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4v16" />
+                </svg>
+              )}
+              {point.icon === 'alert' && (
+                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                </svg>
+              )}
+              {point.icon === 'document' && (
+                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              )}
+              {point.icon === 'clock' && (
+                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              )}
+            </div>
+            <div>
+              <h3 class="font-bold text-surface-900 mb-1">{point.title}</h3>
+              <p class="text-sm text-surface-500">{point.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 해결 섹션 -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-bold text-surface-900 mb-10 text-center">
+        n8n으로 이렇게 해결합니다
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {solutions.map((sol) => (
+          <div class="flex items-start gap-4 p-6 bg-white rounded-xl border border-primary-200">
+            <div class="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center shrink-0">
+              {sol.icon === 'monitor' && (
+                <svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              )}
+              {sol.icon === 'bell' && (
+                <svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+              )}
+              {sol.icon === 'ai' && (
+                <svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+              )}
+              {sol.icon === 'report' && (
+                <svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              )}
+            </div>
+            <div>
+              <h3 class="font-bold text-surface-900 mb-1">{sol.title}</h3>
+              <p class="text-sm text-surface-500">{sol.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 관련 템플릿 목록 -->
+  {financeTemplates.length > 0 && (
+    <section class="py-16 bg-surface-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl md:text-3xl font-bold text-surface-900 mb-10 text-center">
+          금융 자동화 템플릿
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {financeTemplates.map((template) => (
+            <TemplateCard
+              title={template.data.title}
+              description={template.data.description}
+              category={template.data.category}
+              difficulty={template.data.difficulty}
+              pricing={template.data.pricing}
+              nodeCount={template.data.nodeCount}
+              estimatedMinutes={template.data.estimatedMinutes}
+              slug={template.id}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- CTA 섹션 -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-2xl md:text-3xl font-bold text-surface-900 mb-4">
+        금융 업무 자동화를 시작하세요
+      </h2>
+      <p class="text-surface-600 mb-8 max-w-xl mx-auto">
+        더 많은 금융 자동화 템플릿을 확인하고, 바로 다운로드하세요.
+      </p>
+      <a
+        href="/n8n-marketplace/category/finance"
+        class="inline-flex items-center px-6 py-3 bg-primary-500 text-white font-semibold rounded-lg hover:bg-primary-600 transition-colors text-lg"
+      >
+        템플릿 보러가기
+        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </a>
+    </div>
+  </section>
+</BaseLayout>

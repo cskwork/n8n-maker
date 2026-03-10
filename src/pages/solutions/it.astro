@@ -1,0 +1,208 @@
+---
+/**
+ * /solutions/it - IT 자동화 키워드 랜딩 페이지
+ * 문제-해결형 구성: 고민 -> 해결 -> 관련 템플릿 -> CTA
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TemplateCard from '../../components/catalog/TemplateCard.astro';
+import { getCollection } from 'astro:content';
+
+const allTemplates = await getCollection('templates');
+const itTemplates = allTemplates.filter((t) => t.data.category === 'it');
+
+const painPoints = [
+  {
+    title: '서버 장애 늦은 감지',
+    description: '서버에 문제가 생겨도 수동으로 확인하기 전까지 장애를 알 수 없습니다.',
+    icon: 'server',
+  },
+  {
+    title: '도구 간 정보 분산',
+    description: 'Slack, Notion, 이메일 등 여러 도구에 정보가 흩어져 있어 통합 관리가 어렵습니다.',
+    icon: 'scatter',
+  },
+  {
+    title: '반복적 보고서 작성',
+    description: '매일, 매주 같은 형식의 보고서를 수동으로 작성해야 합니다.',
+    icon: 'repeat',
+  },
+  {
+    title: '뉴스/기술 동향 파악',
+    description: '기술 블로그, 뉴스를 일일이 확인하며 최신 동향을 파악하는 데 시간이 걸립니다.',
+    icon: 'news',
+  },
+];
+
+const solutions = [
+  {
+    title: '서버 헬스 자동 모니터링',
+    description: '서버 상태를 주기적으로 체크하고, 이상 감지 시 즉시 Slack으로 알림을 보냅니다.',
+    icon: 'heartbeat',
+  },
+  {
+    title: 'Slack-Notion 양방향 동기화',
+    description: 'Slack 메시지를 Notion에 자동 저장하고, Notion 업데이트를 Slack으로 알립니다.',
+    icon: 'sync',
+  },
+  {
+    title: '일일 보고서 자동 생성',
+    description: '여러 소스의 데이터를 자동 수집하고 정해진 형식으로 보고서를 생성합니다.',
+    icon: 'auto-doc',
+  },
+  {
+    title: '기술 뉴스 자동 요약',
+    description: '기술 블로그, 뉴스를 자동 수집하고 AI가 핵심 내용을 요약하여 공유합니다.',
+    icon: 'summary',
+  },
+];
+---
+
+<BaseLayout
+  title="IT 자동화 - n8n으로 IT/DevOps 업무 자동화하기"
+  description="서버 헬스 모니터링, Slack-Notion 연동, 일일 보고서 등 IT 업무를 n8n으로 자동화하세요"
+  ogType="website"
+  breadcrumbs={[
+    { label: 'IT 자동화', href: '/n8n-marketplace/solutions/it' },
+  ]}
+>
+  <!-- 히어로 섹션 -->
+  <section class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-3xl md:text-5xl font-bold text-surface-900 mb-4">
+        매일 수작업으로 IT 업무 하느라<br class="hidden md:block" /> 힘드셨나요?
+      </h1>
+      <p class="text-lg text-surface-600 mb-8 max-w-2xl mx-auto">
+        n8n 워크플로우 템플릿으로 서버 모니터링부터 보고서 생성까지,<br class="hidden md:block" />
+        반복되는 IT 업무를 자동화하세요.
+      </p>
+    </div>
+  </section>
+
+  <!-- 고민 섹션 -->
+  <section class="py-16 bg-surface-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-bold text-surface-900 mb-10 text-center">
+        이런 고민, 하고 계시지 않나요?
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {painPoints.map((point) => (
+          <div class="flex items-start gap-4 p-6 bg-white rounded-xl border border-surface-200">
+            <div class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center shrink-0">
+              {point.icon === 'server' && (
+                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+                </svg>
+              )}
+              {point.icon === 'scatter' && (
+                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+              )}
+              {point.icon === 'repeat' && (
+                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+              )}
+              {point.icon === 'news' && (
+                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                </svg>
+              )}
+            </div>
+            <div>
+              <h3 class="font-bold text-surface-900 mb-1">{point.title}</h3>
+              <p class="text-sm text-surface-500">{point.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 해결 섹션 -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-bold text-surface-900 mb-10 text-center">
+        n8n으로 이렇게 해결합니다
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {solutions.map((sol) => (
+          <div class="flex items-start gap-4 p-6 bg-white rounded-xl border border-primary-200">
+            <div class="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center shrink-0">
+              {sol.icon === 'heartbeat' && (
+                <svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+              )}
+              {sol.icon === 'sync' && (
+                <svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                </svg>
+              )}
+              {sol.icon === 'auto-doc' && (
+                <svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              )}
+              {sol.icon === 'summary' && (
+                <svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+              )}
+            </div>
+            <div>
+              <h3 class="font-bold text-surface-900 mb-1">{sol.title}</h3>
+              <p class="text-sm text-surface-500">{sol.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 관련 템플릿 목록 -->
+  {itTemplates.length > 0 && (
+    <section class="py-16 bg-surface-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl md:text-3xl font-bold text-surface-900 mb-10 text-center">
+          IT 자동화 템플릿
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {itTemplates.map((template) => (
+            <TemplateCard
+              title={template.data.title}
+              description={template.data.description}
+              category={template.data.category}
+              difficulty={template.data.difficulty}
+              pricing={template.data.pricing}
+              nodeCount={template.data.nodeCount}
+              estimatedMinutes={template.data.estimatedMinutes}
+              slug={template.id}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- CTA 섹션 -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-2xl md:text-3xl font-bold text-surface-900 mb-4">
+        IT 업무 자동화를 시작하세요
+      </h2>
+      <p class="text-surface-600 mb-8 max-w-xl mx-auto">
+        더 많은 IT 자동화 템플릿을 확인하고, 바로 다운로드하세요.
+      </p>
+      <a
+        href="/n8n-marketplace/category/it"
+        class="inline-flex items-center px-6 py-3 bg-primary-500 text-white font-semibold rounded-lg hover:bg-primary-600 transition-colors text-lg"
+      >
+        템플릿 보러가기
+        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </a>
+    </div>
+  </section>
+</BaseLayout>
