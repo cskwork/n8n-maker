@@ -11,11 +11,31 @@ import SortDropdown from '../../components/catalog/SortDropdown.astro';
 import EmptyCategory from '../../components/catalog/EmptyCategory.astro';
 
 export async function getStaticPaths() {
-  const categoryMeta: Record<string, { name: string; description: string }> = {
-    finance: { name: '금융', description: 'DART 공시, 주가 알림, 재무 보고서 자동화' },
-    marketing: { name: '마케팅', description: 'SNS 자동 포스팅, 리드 수집, 캠페인 관리' },
-    hr: { name: 'HR', description: '채용공고 수집, 지원자 관리, 온보딩 자동화' },
-    it: { name: 'IT/DevOps', description: '서버 모니터링, 배포 자동화, 알림 통합' },
+  const categoryMeta: Record<string, { name: string; description: string; seoTitle: string; seoDescription: string }> = {
+    finance: {
+      name: '금융',
+      description: 'DART 공시, 주가 알림, 재무 보고서 자동화',
+      seoTitle: '금융 자동화 n8n 템플릿',
+      seoDescription: 'DART 공시, 주가 알림, 인보이스 자동화 등 금융 업무 자동화 n8n 워크플로우 템플릿',
+    },
+    marketing: {
+      name: '마케팅',
+      description: 'SNS 자동 포스팅, 리드 수집, 캠페인 관리',
+      seoTitle: '마케팅 자동화 n8n 템플릿',
+      seoDescription: 'SNS 자동 포스팅, 리드 수집, 콘텐츠 제작 등 마케팅 업무 자동화 n8n 워크플로우 템플릿',
+    },
+    hr: {
+      name: 'HR',
+      description: '채용공고 수집, 지원자 관리, 온보딩 자동화',
+      seoTitle: 'HR 자동화 n8n 템플릿',
+      seoDescription: '채용공고 자동 수집, 온보딩, 지원자 관리 등 HR 업무 자동화 n8n 워크플로우 템플릿',
+    },
+    it: {
+      name: 'IT/DevOps',
+      description: '서버 모니터링, 배포 자동화, 알림 통합',
+      seoTitle: 'IT 자동화 n8n 템플릿',
+      seoDescription: '서버 모니터링, 배포 자동화, 알림 통합 등 IT/DevOps 업무 자동화 n8n 워크플로우 템플릿',
+    },
   };
 
   const allTemplates = await getCollection('templates');
@@ -33,7 +53,8 @@ const { category, templates } = Astro.props;
 ---
 
 <BaseLayout
-  title={category.name}
+  title={category.seoTitle || category.name}
+  description={category.seoDescription}
   breadcrumbs={[{ label: category.name, href: `/n8n-marketplace/category/${category.slug}` }]}
 >
   <!-- 카테고리 헤더 -->
