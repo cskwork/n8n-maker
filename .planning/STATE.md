@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Phase 4 완료, Phase 5 대기
-stopped_at: Phase 5 context gathered
-last_updated: "2026-03-09T13:53:03.047Z"
-last_activity: 2026-03-09 — Plan 04-04 실행 완료 (Phase 4 전체 검증 + 시각 검증 승인)
+status: Phase 5 진행 중 (Plan 05-01 완료)
+stopped_at: Completed 05-01-PLAN.md
+last_updated: "2026-03-10T22:19:08Z"
+last_activity: 2026-03-11 — Plan 05-01 실행 완료 (SEO 기반 인프라 - OG 메타/sitemap/JSON-LD)
 progress:
   total_phases: 5
   completed_phases: 4
-  total_plans: 11
-  completed_plans: 11
-  percent: 100
+  total_plans: 13
+  completed_plans: 12
+  percent: 92
 ---
 
 # Project State
@@ -21,23 +21,23 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-09)
 
 **Core value:** 비개발자가 복잡한 업무 자동화를 n8n 워크플로우 템플릿 하나로 즉시 실행할 수 있게 하는 것
-**Current focus:** Phase 4 콘텐츠 제작 완료, Phase 5 SEO & 런칭 대기
+**Current focus:** Phase 5 SEO 최적화 진행 중 (Plan 05-01 완료, 05-02 대기)
 
 ## Current Position
 
-Phase: 4 of 5 (콘텐츠 제작) - COMPLETE
-Plan: 4 of 4 in current phase (04-01, 04-02, 04-03, 04-04 완료)
-Status: Phase 4 완료, Phase 5 대기
-Last activity: 2026-03-09 — Plan 04-04 실행 완료 (Phase 4 전체 검증 + 시각 검증 승인)
+Phase: 5 of 5 (SEO 최적화) - IN PROGRESS
+Plan: 1 of 2 in current phase (05-01 완료)
+Status: Phase 5 진행 중, Plan 05-02 대기
+Last activity: 2026-03-11 — Plan 05-01 실행 완료 (SEO 기반 인프라 - OG 메타/sitemap/JSON-LD)
 
-Progress: [██████████] 100%
+Progress: [█████████░] 92%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 11
+- Total plans completed: 12
 - Average duration: 4 min
-- Total execution time: 0.75 hours
+- Total execution time: 0.82 hours
 
 **By Phase:**
 
@@ -47,12 +47,14 @@ Progress: [██████████] 100%
 | 2. 카탈로그 & 랜딩 UI | 2/2 | 6 min | 3 min |
 | 3. 상세 페이지 & 비즈니스 모델 | 3/3 | 8 min | 2.7 min |
 | 4. 콘텐츠 제작 | 4/4 | 17 min | 4.3 min |
+| 5. SEO 최적화 | 1/2 | 4 min | 4 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-03 (3 min), 04-01 (4 min), 04-02 (4 min), 04-03 (6 min), 04-04 (3 min)
+- Last 5 plans: 04-01 (4 min), 04-02 (4 min), 04-03 (6 min), 04-04 (3 min), 05-01 (4 min)
 - Trend: stable
 
 *Updated after each plan completion*
+| Phase 05 P01 | 4 | 2 tasks | 7 files |
 | Phase 04 P04 | 3 | 2 tasks | 0 files |
 | Phase 04 P03 | 6 | 2 tasks | 12 files |
 | Phase 04 P02 | 4 | 2 tasks | 10 files |
@@ -101,6 +103,11 @@ Recent decisions affecting current work:
 - (04-03) 서버 헬스 모니터링에 continueOnFail 적용으로 에러 안전 처리
 - (04-03) 한국 서비스 템플릿에 MDX 본문 내 API 설정 가이드 패턴 확립
 - (04-04) Phase 4 전체 18개 템플릿 종합 검증 통과 (빌드, JSON 유효성, timezone, 한국 API 가이드 모두 정상)
+- (05-01) site URL을 cskwork.github.io로 설정 (사용자 결정 반영)
+- (05-01) BaseLayout Props에 ogImage, ogType, jsonLd 추가로 페이지별 커스텀 가능
+- (05-01) og-image.png는 1200x630 n8n 오렌지 단색 플레이스홀더로 생성
+- (05-01) 네이버 인증 코드를 NAVER_VERIFICATION_CODE_HERE 플레이스홀더로 설정
+- (05-01) GitHub Actions withastro/action v3에서 v5로 업그레이드
 
 ### Pending Todos
 
@@ -113,6 +120,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-09T13:53:03.041Z
-Stopped at: Phase 5 context gathered
-Resume file: .planning/phases/05-seo/05-CONTEXT.md
+Last session: 2026-03-10T22:19:08Z
+Stopped at: Completed 05-01-PLAN.md
+Resume file: .planning/phases/05-seo/05-01-SUMMARY.md
